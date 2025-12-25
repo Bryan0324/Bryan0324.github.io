@@ -3,7 +3,7 @@ language: zh-TW
 
 # ---------------
 # mode: light | dark | auto | time
-mode: time
+mode: dark
 
 # Theme color for customize
 # Notice: color value must in double quotes: "#000000"
