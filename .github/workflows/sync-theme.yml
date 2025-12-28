@@ -18,8 +18,8 @@ jobs:
       - name: Push themes/yun to hexo-theme-yun-unofficial
         run: |
           cd themes/yun
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
           # Initialize git if not already initialized
           if [ ! -d .git ]; then
