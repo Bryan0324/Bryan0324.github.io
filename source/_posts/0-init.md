@@ -1,7 +1,7 @@
 ---
 title: Hello World
 description: 我的第一篇部落格
-date: 2025-12-25
+date: 2009-12-24
 updated: 2025-12-25 00:00:00
 tags:
   - Hexo
