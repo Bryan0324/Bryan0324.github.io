@@ -1,6 +1,7 @@
 ---
 title: 什麼是XSS
 description: 資安小教室1 何謂XSS
+date: 2023-12-28
 tags:
   - 資安
   - 網站
