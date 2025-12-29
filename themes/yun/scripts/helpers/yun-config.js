@@ -56,8 +56,10 @@ hexo.extend.helper.register('yun_config', function () {
 
   // local search
   if (theme.local_search.enable) {
+    // guard against missing hexo-generator-search config
+    const searchPath = (config.search && config.search.path) || theme.local_search.path || 'search.xml'
     exportConfig.local_search = {
-      path: url_for(config.search.path || 'search.xml'),
+      path: url_for(searchPath),
     }
     exportConfig.localsearch = theme.local_search
   }

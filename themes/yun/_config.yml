@@ -516,6 +516,7 @@ engine_search:
   domain: yunyoujun.cn
 
 # Dependencies https://github.com/next-theme/hexo-generator-searchdb
+# Make sure you have installed hexo-generator-searchdb plugin. ( npm install hexo-generator-searchdb --save )
 local_search:
   enable: false
   # If auto, trigger search by changing input.

@@ -54,6 +54,10 @@ social:
   link: https://github.com/Bryan0324
   icon: ri:github-line
   color: "#6e5494"
+- name: Threads
+  link: https://www.threads.com/@bryanhuang324
+  icon: ri:threads-line
+  color: "#545454"
 # - name: Twitter
 #   link: https://twitter.com/YunYouJun
 #   icon: ri:twitter-line
@@ -67,7 +71,7 @@ social:
 pages:
   - name: 友誼的力量
     url: /friends/
-    icon: ri:genderless-line
+    icon: ri:user-community-fill
     color: dodgerblue
 
 # pages
@@ -464,13 +468,14 @@ engine_search:
   domain: https://bryan0324.github.io/my-blog-page/
 
 # Dependencies https://github.com/next-theme/hexo-generator-searchdb
+# Make sure you have installed hexo-generator-searchdb plugin. ( npm install hexo-generator-searchdb --save )
 local_search:
-  enable: false
+  enable: true
   # If auto, trigger search by changing input.
   # If manual, trigger search by pressing enter key or search button.
   trigger: auto
   # Show top n results per article, show all results by setting to -1
-  top_n_per_article: 1
+  top_n_per_article: -1
   # Unescape html strings to the readable one.
   unescape: false
   # Preload the search data when the page loads.
