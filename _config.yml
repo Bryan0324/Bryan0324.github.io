@@ -4,7 +4,7 @@
 
 # Site
 title: 草貓筆記
-subtitle: '草貓的技術與生活筆記'
+subtitle: '草貓的部落格農場'
 description: ''
 keywords:
 author: Bryan0324
@@ -13,7 +13,7 @@ timezone: Asia/Taipei
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://bryan0324.github.io/my-blog-page
+url: https://bryan0324.github.io
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
