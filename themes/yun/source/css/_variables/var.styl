@@ -45,3 +45,59 @@ html.dark {
   --page-btn-hover-bg-color: rgba(lighten($colors.primary, 80%), 0.9);
   --page-btn-active-bg-color: $colors.primary;
 }
+
+// Sunset mode (warm evening palette)
+html.sunset {
+  --hty-mode: 'sunset';
+  --hty-bg-color: convert(hexo-config('colors.sunset.bg')) || #FFF5E6;
+  --hty-text-color: convert(hexo-config('colors.sunset.text')) || #8B4513;
+  --hty-secondary-text-color: #A0522D;
+  --post-block-bg-color: convert(hexo-config('colors.sunset.block')) || #FFE8D6;
+  // star-markdown-css
+  --smc-link-color: convert(hexo-config('colors.sunset.link')) || #FF8E53;
+  // yun
+  --yun-bg-image: url(hexo-config('bg_image.sunset'));
+  // banner
+  --banner-line-color: #FF6B35;
+  --banner-char-color: #FF6B35;
+  --banner-char-bg-color: rgba(#FFF5E6, 0.3);
+  --banner-char-hover-color: #FF8E53;
+  // post-card
+  --post-card-bg-color: rgba(#FFE8D6, hexo-config('post_card.opacity') || 0.9);
+  --post-card-shadow: 0 1px 8px rgba(#FF8E53, 0.2);
+  // sidebar
+  --sidebar-bg-color: rgba(#FFE8D6, 0.95);
+  --sidebar-bg-image: url(hexo-config('sidebar.sunset_bg_image'));
+  // pagination
+  --page-btn-bg-color: rgba(#FF8E53, 0.3);
+  --page-btn-hover-bg-color: rgba(#FF8E53, 0.7);
+  --page-btn-active-bg-color: #FF6B35;
+}
+
+// Midnight mode (deep night palette)
+html.midnight {
+  --hty-mode: 'midnight';
+  --hty-bg-color: #0a0e27;
+  --hty-text-color: #b8c5d6;
+  --hty-secondary-text-color: #8a9bb5;
+  --post-block-bg-color: #141b2d;
+  // star-markdown-css
+  --smc-link-color: #6b9bd1;
+  // yun
+  --yun-bg-image: url(hexo-config('bg_image.midnight'));
+  // banner
+  --banner-line-color: #6b9bd1;
+  --banner-char-color: #6b9bd1;
+  --banner-char-bg-color: rgba(#0a0e27, 0.7);
+  --banner-char-hover-color: #89b4f8;
+  // post-card
+  --post-card-bg-color: rgba(#141b2d, hexo-config('post_card.opacity') || 0.9);
+  --post-card-shadow: 0 1px 8px rgba(#0a0e27, 0.3);
+  // sidebar
+  --sidebar-bg-color: rgba(#141b2d, 0.95);
+  --sidebar-bg-image: url(hexo-config('sidebar.midnight_bg_image'));
+  // pagination
+  --page-btn-bg-color: rgba(#1a2332, 0.8);
+  --page-btn-hover-bg-color: rgba(#6b9bd1, 0.5);
+  --page-btn-active-bg-color: #6b9bd1;
+}

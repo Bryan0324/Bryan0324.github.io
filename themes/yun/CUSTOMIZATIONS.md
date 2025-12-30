@@ -7,6 +7,7 @@ This document tracks all custom modifications made to the original hexo-theme-yu
 - [Visual Effects](#visual-effects)
 - [Comments Integration](#comments-integration)
 - [Theme Toggle](#theme-toggle)
+- [Multi-Mode Theme System](#multi-mode-theme-system)
 - [Configuration](#configuration)
 
 ---
@@ -151,6 +152,243 @@ mode_toggle:
 - When `mode_toggle.enable: true` (default): button shows if mode is set
 - When `mode_toggle.enable: false`: button is hidden regardless of mode
 - Works with all mode types: light, dark, auto, time
+
+---
+
+## Multi-Mode Theme System
+
+### Sunset Mode & Extensible Architecture
+**Files Created:**
+- `source/js/ui/mode-handler.js` (new modular mode system)
+
+**Files Modified:**
+- `layout/_partial/layout.pug`
+- `source/css/_variables/var.styl`
+- `_config.yml` (theme default)
+- `_config.yun.yml` (user config)
+
+**Overview:**
+Implemented a sunset theme mode as an independent third mode alongside light and dark, with a refactored architecture that makes adding new modes straightforward. The system now supports:
+- **Light mode** (☀️): Default bright theme
+- **Sunset mode** (🌅): Warm evening palette (5pm-8pm when using time mode)
+- **Dark mode** (🌙): Night theme
+- **Easy extensibility**: Add new modes by editing configuration object
+
+### Sunset Mode Features
+
+**Color Palette:**
+- Primary: `#FF6B6B` (coral red)
+- Background: `#FFF5E6` (warm cream)
+- Block: `#FFE8D6` (light peach)
+- Text: `#8B4513` (saddle brown)
+- Links: `#FF8E53` (orange)
+- Selection: `#FFB5E8` (light pink)
+
+**Time Mode Integration:**
+When `mode: time` is set, the theme automatically cycles based on time:
+- **07:00-17:00** (7am-5pm): Light mode
+- **17:00-20:00** (5pm-8pm): Sunset mode 🌅
+- **20:00-07:00** (8pm-7am): Dark mode 🌙
+
+**Background Images:**
+Supports independent background images for each mode:
+```yaml
+bg_image:
+  enable: true
+  url: https://example.com/light-bg.jpg
+  dark: https://example.com/dark-bg.jpg
+  sunset: https://example.com/sunset-bg.jpg
+  opacity: 1
+```
+
+### Extensible Mode System Architecture
+
+**Configuration-Driven Design:**
+The `mode-handler.js` uses a `MODE_CONFIG` object where new modes can be added:
+
+```javascript
+const MODE_CONFIG = {
+  light: {
+    name: 'light',
+    class: '',           // No class for default
+- [ ] Sunset mode displays correct colors and backgrounds
+- [ ] Time mode switches to sunset at 5pm-8pm
+- [ ] Toggle button cycles through all modes: light → sunset → dark → light
+- [ ] Mode preference persists in localStorage
+- [ ] New modes can be added by updating MODE_CONFIG
+
+---
+
+**Last Updated:** December 31
+    name: 'sunset',
+    class: 'sunset',     // CSS class: html.sunset
+    icon: '🌅',
+    next: 'dark'
+  },
+  dark: {
+    name: 'dark',
+    class: 'dark',
+    icon: '🌙',
+    next: 'light'
+  }
+  // Add new modes here by following the same pattern
+};
+```
+
+**How to Add a New Mode:**
+
+1. **Add to MODE_CONFIG** in `mode-handler.js`:
+```javascript
+midnight: {
+  name: 'midnight',
+  class: 'midnight',
+  icon: '🌌',
+  next: 'light'  // or any existing mode
+}
+```
+
+2. **Add CSS Variables** in `source/css/_variables/var.styl`:
+```stylus
+html.midnight {
+  --hty-mode: 'midnight';
+  --hty-bg-color: #0a0e27;
+  --hty-text-color: #b8c5d6;
+  --post-block-bg-color: #141b2d;
+  --smc-link-color: #6b9bd1;
+  // ... more variables
+}
+```
+
+3. **Add Color Configuration** in `_config.yun.yml`:
+```yaml
+colors:
+  midnight:
+    primary: '#6b9bd1'
+    bg: '#0a0e27'
+    block: '#141b2d'
+    text: '#b8c5d6'
+    link: '#89b4f8'
+    selection_bg: '#1a2f5a'
+```
+
+4. **Optional: Add Background Image**:
+```yaml
+bg_image:
+  midnight: https://example.com/midnight-bg.jpg
+```
+
+### Toggle Button Behavior
+
+The mode toggle button now cycles through all defined modes in sequence:
+- Automatically removes darken.js event listeners to prevent conflicts
+- Uses `localStorage` with key `darken-mode` to persist user preference
+- Cycles through modes in the order defined by the `next` property in `MODE_CONFIG`
+- Works independently from `CONFIG.mode` setting (manual override)
+
+**Integration with Time/Auto Modes:**
+- `time` mode: Automatically applies mode based on hour, but manual toggle overrides
+- `auto` mode: Uses system preference, manual toggle overrides
+- Manual toggle preference persists in localStorage
+
+### CSS Variables System
+
+**Sunset Mode Variables:**
+```stylus
+html.sunset {
+  --hty-mode: 'sunset';
+  --hty-bg-color: #FFF5E6;
+  --hty-text-color: #8B4513;
+  --post-block-bg-color: #FFE8D6;
+  --smc-link-color: #FF8E53;
+  --yun-bg-image: url(hexo-config('bg_image.sunset'));
+  --banner-line-color: #FF6B35;
+  --post-card-bg-color: rgba(#FFE8D6, 0.9);
+  --sidebar-bg-color: rgba(#FFE8D6, 0.95);
+  // pagination, buttons, shadows, etc.
+}
+```
+
+**Variable Categories:**
+- Mode identifier: `--hty-mode`
+- Colors: Background, text, links, blocks
+- Banner styling: Line and character colors
+- Post cards: Background and shadows
+- Sidebar: Background color and image
+- Pagination: Button colors and hover states
+
+### ModeHandler Class API
+
+**Methods:**
+- `getCurrentMode()`: Returns current active mode name
+- `applyMode(modeName)`: Applies specified mode to DOM
+- `toggle()`: Cycles to next mode
+- `init()`: Initializes handler and sets up toggle button
+- `getModeConfig(modeName)`: Returns configuration for a mode
+- `addMode(name, config)`: Dynamically add new mode (advanced)
+
+**Usage Example:**
+```javascript
+// Access globally available handler
+window.modeHandler.applyMode('sunset');
+window.modeHandler.toggle(); // Switch to next mode
+```
+
+### Configuration
+
+**Theme Config (_config.yun.yml):**
+```yaml
+# mode: light | dark | auto | time | sunset
+# time mode schedule: 07:00-17:00 light, 17:00-20:00 sunset, 20:00-07:00 dark
+mode: time  # or 'sunset' for static sunset mode
+
+mode_toggle:
+  enable: true
+
+colors:
+  sunset:
+    primary: '#FF6B6B'
+    bg: '#FFF5E6'
+    block: '#FFE8D6'
+    text: '#8B4513'
+    link: '#FF8E53'
+    selection_bg: '#FFB5E8'
+
+bg_image:
+  sunset: https://example.com/sunset-bg.jpg
+
+sidebar:
+  sunset_bg_image: https://example.com/sunset-sidebar.jpg
+
+search:
+  sunset_bg_image: https://example.com/sunset-search.jpg
+```
+
+### Implementation Details
+
+**Initial Mode Detection (layout.pug):**
+```javascript
+// Time mode with sunset
+if (CONFIG.mode === 'time') {
+  const hour = new Date().getHours()
+  if (hour >= 17 && hour < 20) {
+    document.documentElement.classList.add('sunset')
+  } else if (hour >= 20 || hour < 7) {
+    document.documentElement.classList.add('dark')
+  }
+}
+```
+
+**Manual Toggle Override:**
+The `mode-handler.js` loads after initial detection, allowing users to manually override the time-based or auto-based mode selection. The manual choice is saved to `localStorage` and persists across page loads.
+
+### Benefits
+
+1. **User Experience**: Smooth transition between day/evening/night themes
+2. **Developer Experience**: Adding new modes requires minimal code
+3. **Maintainability**: Configuration-driven approach keeps code DRY
+4. **Extensibility**: No core logic changes needed for new modes
+5. **Compatibility**: Works with existing darken.js infrastructure
+6. **Performance**: Lightweight, class-based mode switching
 
 ---
 

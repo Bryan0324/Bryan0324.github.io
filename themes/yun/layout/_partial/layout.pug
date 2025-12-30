@@ -3,7 +3,7 @@
 - var copyright = config.copyright || config.author
 
 doctype html
-html(lang=config.language, class=theme.mode === 'dark' ? 'dark' : '')
+html(lang=config.language, class=theme.mode === 'dark' ? 'dark' : (theme.mode === 'sunset' ? 'sunset' : ''))
   head
     meta(charset='UTF-8')
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
@@ -22,13 +22,29 @@ html(lang=config.language, class=theme.mode === 'dark' ? 'dark' : '')
     include head.pug
     include extended.pug
     block preconnect
+    //- Mode handler for multi-mode support (light/dark/sunset)
+    script(src=url_for('/js/ui/mode-handler.js'))
     script.
       (function() {
-        if (CONFIG.mode !== 'auto') return
-        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-        const setting = localStorage.getItem('darken-mode') || 'auto'
-        if (setting === 'dark' || (prefersDark && setting !== 'light'))
-          document.documentElement.classList.toggle('dark', true)
+        const hour = new Date().getHours()
+        
+        // Handle time mode with sunset (17:00-20:00 sunset, 20:00-07:00 dark, 07:00-17:00 light)
+        if (CONFIG.mode === 'time') {
+          if (hour >= 17 && hour < 20) {
+            document.documentElement.classList.add('sunset')
+          } else if (hour >= 20 || hour < 7) {
+            document.documentElement.classList.add('dark')
+          }
+          return
+        }
+        
+        // Handle auto mode (system preference)
+        if (CONFIG.mode === 'auto') {
+          const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+          const setting = localStorage.getItem('darken-mode') || 'auto'
+          if (setting === 'dark' || (prefersDark && setting !== 'light'))
+            document.documentElement.classList.toggle('dark', true)
+        }
       })()
   body(class= is_home() ? 'is-home' : '')
     //- global

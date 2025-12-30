@@ -2,8 +2,9 @@ language: zh-TW
 # ---------------------------------------------------------------
 
 # ---------------
-# mode: light | dark | auto | time
-mode: dark
+# mode: light | dark | auto | time | sunset
+# time mode schedule: 07:00-17:00 light, 17:00-20:00 sunset, 20:00-07:00 dark
+mode: time
 
 # Toggle button for switching theme mode in sidebar
 mode_toggle:
@@ -21,6 +22,13 @@ colors:
   dark:
     block: '#1b1f2e'
     # block: "#17202A"
+  sunset:
+    primary: '#FF6B6B'
+    bg: '#FFF5E6'
+    block: '#FFE8D6'
+    text: '#8B4513'
+    link: '#FF8E53'
+    selection_bg: '#FFB5E8'
 
 # Favicon
 # ---------------
@@ -324,6 +332,7 @@ bg_image:
   enable: true
   url: https://cdn.yunyoujun.cn/img/bg/stars-timing-0-blur-30px.jpg # recomend image related to your mode
   dark: https://cdn.yunyoujun.cn/img/bg/galaxy.jpg
+  sunset: https://img.freepik.com/free-photo/sea-landscape-with-digital-art-style_23-2151158336.jpg
   # blur: 30px
   opacity: 1
 

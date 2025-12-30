@@ -1,5 +1,6 @@
 # ---------------
-# mode: light | dark | auto | time
+# mode: light | dark | auto | time | sunset
+# time mode schedule: 07:00-17:00 light, 17:00-20:00 sunset, 20:00-07:00 dark
 mode: auto
 
 # Toggle button for switching theme mode in sidebar
@@ -18,6 +19,14 @@ colors:
   dark:
     block: "#1b1f2e"
     # block: "#17202A"
+  # Sunset mode colors (warm evening palette)
+  sunset:
+    primary: "#FF6B6B"
+    bg: "#FFF5E6"
+    block: "#FFE8D6"
+    text: "#8B4513"
+    link: "#FF8E53"
+    selection_bg: "#FFB5E8"
 
 # Favicon
 # ---------------
