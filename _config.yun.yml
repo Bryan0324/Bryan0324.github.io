@@ -1,6 +1,5 @@
 language: zh-TW
 # ---------------------------------------------------------------
-
 # ---------------
 # mode: light | dark | auto | time | sunset
 # time mode schedule: 07:00-17:00 light, 17:00-20:00 sunset, 20:00-07:00 dark
