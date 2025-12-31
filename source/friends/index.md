@@ -5,7 +5,7 @@ keywords: 朋友
 description: 
 comments: true
 links:
-  - url: https://bryan0324.github.io/my-blog-page/
+  - url: https://bryan0324.github.io/
     avatar: https://avatars.githubusercontent.com/u/34998621
     name: 草貓
     blog: 草貓本貓
@@ -19,7 +19,7 @@ tip: 友鏈加載中～如失敗請刷新重試～
 若想要新增你的連結，歡迎在底下留言：
 (範例)
 ```yml
-- url: https://bryan0324.github.io/my-blog-page/
+- url: https://bryan0324.github.io/
   avatar: https://avatars.githubusercontent.com/u/34998621
   name: 草貓
   blog: 草貓本貓
