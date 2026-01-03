@@ -37,8 +37,8 @@ def load_secrets() -> dict[str, str | bool | dict | None]:
 
 # 從 git hook 傳進來的參數
 commit_message = sys.argv[1]
-added_files = sys.argv[2].split("./public")[1:]
-modified_files = sys.argv[3].split("./public")[1:]
+added_files = sys.argv[2].split("./public/")[1:]
+modified_files = sys.argv[3].split("./public/")[1:]
 
 # 取得 secrets（優先使用 env）
 secrets = load_secrets()
@@ -57,18 +57,18 @@ if commit_message[:5] != "-post":
     print("Test mode, not posting to Threads.")
     sys.exit(0)
 
-text = "我的部落格更新了！ 這次更新了以下內容："+commit_message[5:]
+text = "我的部落格更新了！ 這次更新了以下內容：\n\n"+commit_message[5:]
 parent = threads.create_post(text=text)
 parent = parent.publish()
 print("Published:", parent)
 time.sleep(2)  # 等兩秒，避免發文太快被擋
-text = "新增的部落格連結：\n"
+text = "新增的部落格連結：\n\n"
 for file in added_files:
     if file.strip() == "":
         continue
     text += f"- https://Bryan0324.github.io/{file}\n"
 
-text = "修改的部落格連結：\n"
+text += "修改的部落格連結：\n\n"
 for file in modified_files:
     if file.strip() == "":
         continue
