@@ -5,7 +5,7 @@ date: 2025-12-25
 updated: 2025-12-25 08:00:00
 tags:
   - hydro
-  - 教程
+  - 教學
   - cloudflare
 ---
 # hydro + cloudflare 食用說明

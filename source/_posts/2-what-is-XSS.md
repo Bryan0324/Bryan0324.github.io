@@ -10,7 +10,7 @@ tags:
 ---
 今天一樣寫套件  
 程式如下  
-![附圖一](/img/2-XSS-1.png)  
+![附圖一](/img//2-what-is-XSS/1.png)  
 學長和我說會有XSS攻擊的可能  
 我想 為什麼 XSS 不是要有使用者輸入才會有可能嗎  
 後來發現是`/hitokoto`的內容可以供使用者輸入  
@@ -31,6 +31,6 @@ XSS == Cross-site scripting == 跨網站指令碼
 不要用`innerHTML` 因為它會把內容渲染成實際的element  
 改用像是`textContent`或是`innerText`等已渲染的純文字  
 附圖二如下  
-![附圖二](/img/2-XSS-2.png)
+![附圖二](/img/2-what-is-XSS/2.png)
 
 這次經驗讓我把過去學到的東西有了實際的形狀  
