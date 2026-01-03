@@ -58,21 +58,34 @@ if commit_message[:5] != "-post":
     sys.exit(0)
 
 text = "我的部落格更新了！ 這次更新了以下內容：\n\n"+commit_message[5:]
-parent = threads.create_post(text=text)
+
+posts = split_text(text)
+parent = threads.create_post(text=posts[0])
 parent = parent.publish()
+time.sleep(2)  # 等兩秒，避免發文太快被擋
+for post_text in posts[1:]:
+    parent = parent.reply(
+        threads.create_post(text=post_text)
+    )
+    time.sleep(2)  # 等兩秒，避免發文太快被擋
 print("Published:", parent)
 time.sleep(2)  # 等兩秒，避免發文太快被擋
-text = "新增的部落格連結：\n\n"
-for file in added_files:
-    if file.strip() == "":
-        continue
-    text += f"- https://Bryan0324.github.io/{file}\n"
 
-text += "修改的部落格連結：\n\n"
-for file in modified_files:
-    if file.strip() == "":
-        continue
-    text += f"- https://Bryan0324.github.io/{file}\n"
+text = ""
+
+if len(added_files) > 0:
+    text = "新增的部落格連結：\n"
+    for file in added_files:
+        if file.strip() == "":
+            continue
+        text += f"- https://Bryan0324.github.io/{file}\n"
+
+if len(modified_files) > 0:
+    text += "修改的部落格連結：\n"
+    for file in modified_files:
+        if file.strip() == "":
+            continue
+        text += f"- https://Bryan0324.github.io/{file}\n"
 
 posts = split_text(text)
 for post_text in posts:
