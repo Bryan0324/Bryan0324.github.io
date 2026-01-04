@@ -670,7 +670,7 @@ livere:
 
 # https://github.com/utterance/utterances
 utterances:
-  enable: true
+  enable: false
   repo: Bryan0324/Bryan0324.github.io
   issue-term: pathname
   # label: comment
@@ -678,12 +678,16 @@ utterances:
 
 # https://github.com/laymonage/giscus
 giscus:
-  enable: false
-  repo:
-  repo-id:
-  category:
-  category-id:
+  enable: true
+  repo: Bryan0324/Bryan0324.github.io
+  repo-id: R_kgDOQuqauw
+  category: Announcements
+  category-id: DIC_kwDOQuqau84C0kJ8
   mapping: pathname
   reactions-enabled: 1
-  emit-metadata: 0
-  theme: light
+  emit-metadata: 1
+  theme: light # preferred_color_scheme
+  lang: zh-TW
+  loading: lazy
+  input-position: top
+  strict: 0
