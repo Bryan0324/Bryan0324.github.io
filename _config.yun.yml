@@ -113,6 +113,9 @@ avatar:
     emoji: 😊
     message: 喵～
 
+404:
+  message: 
+
 # main menu navigation
 menu:
   home:
