@@ -485,6 +485,14 @@ The `mode-handler.js` loads after initial detection, allowing users to manually 
 - Changed from `hexo generate && hexo server` to `hexo clean && hexo generate && hexo server`
 - Ensures clean builds during development
 
+### Frontmatter Reference Updates
+**File Modified:**
+- `themes/yun/post-template.md`
+
+**Changes:**
+- Documented how to write frontmatter for post
+- Documented how to configure custom `type` entries in `_config.yun.yml` (color/icon) and reference via `type: <name>` in frontmatter
+
 ---
 
 ## Dependencies
