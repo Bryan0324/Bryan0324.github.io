@@ -686,7 +686,7 @@ giscus:
   mapping: pathname
   reactions-enabled: 1
   emit-metadata: 1
-  theme: light # preferred_color_scheme
+  theme: transparent_dark # preferred_color_scheme
   lang: zh-TW
   loading: lazy
   input-position: top
