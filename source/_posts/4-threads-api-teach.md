@@ -1,6 +1,7 @@
 ---
 title: threads 自動發文設定
 description: meta developers建立應用程式
+date: 2026-01-03
 tags:
   - threads
   - 教學

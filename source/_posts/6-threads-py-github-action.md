@@ -1,6 +1,7 @@
 ---
 title: threads同步部落格自動發文 -- python + github action 實現
 description: threads-py
+date: 2026-01-04
 tags:
   - threads
   - 教學

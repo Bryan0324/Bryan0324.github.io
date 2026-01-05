@@ -1,6 +1,7 @@
 ---
 title: hydro 套件開發隨筆記 -- 1
 description: hydro 套件開發
+date: 2026-01-04
 tags:
     - 開發
     - hydro

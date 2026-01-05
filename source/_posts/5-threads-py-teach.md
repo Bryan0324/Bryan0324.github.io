@@ -1,6 +1,7 @@
 ---
 title: threads 自動發文-- python 實現
 description: threads-py
+date: 2026-01-03
 tags:
   - threads
   - 教學
