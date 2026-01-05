@@ -1,7 +1,7 @@
 ---
 title: 演算法筆記 -- tarjan algorithm 
 description: 連通性問題
-date: 2026-01-05
+date: 2026-01-05 12:00:00 +0800
 tags:
     - 競程
     - 演算法
