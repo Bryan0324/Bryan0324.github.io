@@ -97,9 +97,11 @@ jobs:
           # Function to map source file to public path
           map_to_public() {
             local file="$1"
-            # Extract filename without extension (e.g., 0-init.md -> 0-init)
-            local filename=$(basename "$file" .md)
-            \.mdx?
+            # Extract filename without extension (e.g., 0-init.mdx -> 0-init)
+            local filename=$(basename "$file" .mdx)
+            if [ "$filename" = "$(basename "$file")" ]; then
+              filename=$(basename "$file" .md)
+            fi
             # Search for matching directory in public folder
             local public_path=$(find ./public -type d -name "$filename" 2>/dev/null | head -1)
             echo "$public_path"
