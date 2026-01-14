@@ -18,7 +18,8 @@ links:
     desc: "不要再TLE了，我裂開"
     color: '#000000'
     email:
-  - name: 伊藤喵貓
+  - blog: 伊藤喵貓
+    name: 伊藤喵貓
     image: https://avatars.githubusercontent.com/u/130988476?s=96&v=4
     url: https://twcat0503.org
     desc: 全能大電神⚡️
