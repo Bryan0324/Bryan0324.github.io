@@ -20,7 +20,7 @@ links:
     email:
   - blog: 伊藤喵貓
     name: 伊藤喵貓
-    image: https://avatars.githubusercontent.com/u/130988476
+    avatar: https://avatars.githubusercontent.com/u/130988476
     url: https://twcat0503.org
     desc: 全能大電神⚡️
     color: '#e6cfe6'
