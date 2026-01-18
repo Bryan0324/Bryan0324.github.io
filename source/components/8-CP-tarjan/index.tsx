@@ -1,5 +1,45 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react'
-import cytoscape from 'cytoscape'
+import React, { useEffect, useRef, useState, useMemo, CSSProperties } from 'react'
+import cytoscape, { Core } from 'cytoscape'
+
+// ============================================================================
+// Types
+// ============================================================================
+
+type ColorPalette = {
+  node: string
+  nodeVisiting: string
+  nodeCurrent: string
+  nodeVisited: string
+  edgeDefault: string
+  tree: string
+  back: string
+  forward: string
+  cross: string
+}
+
+type Event = {
+  id: string
+  type: string
+  status?: string
+  parent?: number | null
+}
+
+type ControlsProps = {
+  onNext: () => void
+  onReset: () => void
+  isComplete: boolean
+  isDirected: boolean
+  onToggleDirection: () => void
+}
+
+type LegendProps = {
+  palette: ColorPalette
+}
+
+type LegendData = {
+  type: string
+  color: string
+}
 
 // ============================================================================
 // Constants
@@ -18,8 +58,8 @@ const GRAPH_CONFIG = {
     [5, 6],
     [6, 4], // back edge
     [5, 7],
-    [0, 7]  // cross edge
-  ]
+    [0, 7]
+  ] as Array<[number, number]>
 }
 
 const EDGE_TYPES = {
@@ -27,18 +67,6 @@ const EDGE_TYPES = {
   BACK: 'back',
   FORWARD: 'forward',
   CROSS: 'cross'
-}
-
-type ColorPalette = {
-  node: string
-  nodeVisiting: string
-  nodeCurrent: string
-  nodeVisited: string
-  edgeDefault: string
-  tree: string
-  back: string
-  forward: string
-  cross: string
 }
 
 const DEFAULT_COLORS: ColorPalette = {
@@ -53,27 +81,20 @@ const DEFAULT_COLORS: ColorPalette = {
   cross: '#a855f7'
 }
 
-type TarjanProps = {
-  nodes?: number[]
-  edges?: Array<[number, number]>
-  defaultDirected?: boolean
-  colors?: Partial<ColorPalette>
-}
-
-const STYLES = {
+const STYLES: Record<string, CSSProperties | Record<string, CSSProperties>> = {
   container: {
     width: '100%',
     height: '420px',
     border: '1px solid #ddd',
     display: 'block',
-    position: 'relative'
+    position: 'relative' as const
   },
   controls: {
     marginTop: 8,
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap' as const
   },
   button: {
     marginLeft: 8
@@ -92,7 +113,7 @@ const STYLES = {
   },
   legendItems: {
     display: 'flex',
-    flexWrap: 'wrap',
+    flexWrap: 'wrap' as const,
     gap: '16px'
   },
   legendItem: {
@@ -112,24 +133,23 @@ const NODE_STATE = {
   UNVISITED: 0,
   VISITING: 1,
   VISITED: 2
-}
+} as const
 
 // ============================================================================
 // DFS Algorithm - Tarjan's Edge Classification
 // ============================================================================
 
-/**
- * Performs DFS traversal and classifies edges as tree, back, forward, or cross.
- * This is the foundation for Tarjan's algorithm visualization.
- */
-function classifyEdges(nodes, edges, isDirected = true) {
+function classifyEdges(
+  nodes: number[],
+  edges: Array<[number, number]>,
+  isDirected: boolean = true
+): Event[] {
   let time = 0
-  const dfn = {} // discovery time for each node
-  const state = {} // current state of each node
-  const adj = {} // adjacency list representation
-  const events = [] // sequence of edge classification events
-  const edgeIds = new Map() // store original edge IDs
-
+  const dfn: Record<number, number> = {} // discovery time for each node
+  const state: Record<number, number> = {} // current state of each node
+  const adj: Record<number, number[]> = {} // adjacency list representation
+  const events: Event[] = [] // sequence of edge classification events
+  const edgeIds = new Map<string, string>() // store original edge IDs
   // Initialize data structures
   nodes.forEach(v => {
     adj[v] = []
@@ -164,19 +184,17 @@ function classifyEdges(nodes, edges, isDirected = true) {
       }
       if (state[v] === NODE_STATE.UNVISITED) {
         // Tree edge: leads to undiscovered node
-        events.push({ id: edgeId, type: EDGE_TYPES.TREE })
+        events.push({ id: edgeId as string, type: EDGE_TYPES.TREE })
         dfs(v, u)
-      } else 
-      {
+      } else {
         if (state[v] === NODE_STATE.VISITING) {
           // Back edge: leads to ancestor in DFS tree
-          events.push({ id: edgeId, type: EDGE_TYPES.BACK })
-        } else if(isDirected) {
-          // Forward or cross edge: leads to descendant or sibling
+          events.push({ id: edgeId as string, type: EDGE_TYPES.BACK })
+        } else if (isDirected) {
           if (dfn[v] > dfn[u]) {
-            events.push({ id: edgeId, type: EDGE_TYPES.FORWARD })
+            events.push({ id: edgeId as string, type: EDGE_TYPES.FORWARD })
           } else {
-            events.push({ id: edgeId, type: EDGE_TYPES.CROSS })
+            events.push({ id: edgeId as string, type: EDGE_TYPES.CROSS })
           }
         }
       }
@@ -209,7 +227,7 @@ function createCytoscapeInstance(
   edges: Array<[number, number]>,
   isDirected: boolean,
   palette: ColorPalette
-) {
+): Core {
   const nodeElements = nodes.map(id => ({ data: { id: String(id) } }))
   const edgeElements = edges.map(([u, v]) => ({
     data: { id: `${u}-${v}`, source: String(u), target: String(v) }
@@ -314,16 +332,16 @@ function createCytoscapeInstance(
 // Control Component
 // ============================================================================
 
-function Controls({ onNext, onReset, isComplete, isDirected, onToggleDirection }) {
+function Controls({ onNext, onReset, isComplete, isDirected, onToggleDirection }: ControlsProps) {
   return (
-    <div style={STYLES.controls}>
+    <div style={STYLES.controls as CSSProperties}>
       <button onClick={onNext} disabled={isComplete}>
         下一步
       </button>
-      <button onClick={onReset} style={STYLES.button}>
+      <button onClick={onReset} style={STYLES.button as CSSProperties}>
         重置
       </button>
-      <button onClick={onToggleDirection} style={STYLES.button}>
+      <button onClick={onToggleDirection} style={STYLES.button as CSSProperties}>
         切換為{isDirected ? '無向圖' : '有向圖'}
       </button>
     </div>
@@ -334,8 +352,8 @@ function Controls({ onNext, onReset, isComplete, isDirected, onToggleDirection }
 // Legend Component
 // ============================================================================
 
-function Legend({ palette }: { palette: ColorPalette }) {
-  const legendData = [
+function Legend({ palette }: LegendProps) {
+  const legendData: LegendData[] = [
     { type: '樹邊 (Tree)', color: palette.tree },
     { type: '回邊 (Back)', color: palette.back },
     { type: '前向邊 (Forward)', color: palette.forward },
@@ -343,12 +361,12 @@ function Legend({ palette }: { palette: ColorPalette }) {
   ]
 
   return (
-    <div style={STYLES.legend}>
-      <div style={STYLES.legendTitle}>邊的類型圖例</div>
-      <div style={STYLES.legendItems}>
+    <div style={STYLES.legend as CSSProperties}>
+      <div style={STYLES.legendTitle as CSSProperties}>邊的類型圖例</div>
+      <div style={STYLES.legendItems as CSSProperties}>
         {legendData.map(({ type, color }) => (
-          <div key={type} style={STYLES.legendItem}>
-            <div style={{ ...STYLES.legendColor, backgroundColor: color }} />
+          <div key={type} style={STYLES.legendItem as CSSProperties}>
+            <div style={{ ...STYLES.legendColor, backgroundColor: color } as CSSProperties} />
             <span>{type}</span>
           </div>
         ))}
@@ -362,11 +380,11 @@ function Legend({ palette }: { palette: ColorPalette }) {
 // ============================================================================
 
 export default function TarjanVisualization() {
-  const containerRef = useRef(null)
-  const cyRef = useRef(null)
-  const [step, setStep] = useState(0)
-  const [mounted, setMounted] = useState(false)
-  const [isDirected, setIsDirected] = useState(true)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const cyRef = useRef<Core | null>(null)
+  const [step, setStep] = useState<number>(0)
+  const [mounted, setMounted] = useState<boolean>(false)
+  const [isDirected, setIsDirected] = useState<boolean>(true)
   const [graphNodes, setGraphNodes] = useState<number[]>(GRAPH_CONFIG.nodes)
   const [graphEdges, setGraphEdges] = useState<Array<[number, number]>>(GRAPH_CONFIG.edges)
   const [palette, setPalette] = useState<ColorPalette>(DEFAULT_COLORS)
@@ -485,7 +503,7 @@ export default function TarjanVisualization() {
       
       // Update for each edge type
       Object.values(EDGE_TYPES).forEach(type => {
-        cyRef.current.style()
+        cyRef.current!.style()
           .selector(`.${type}`)
           .style({
             'target-arrow-shape': arrowShape
@@ -499,7 +517,7 @@ export default function TarjanVisualization() {
 
   return (
     <div>
-      <div ref={containerRef} style={STYLES.container} />
+      <div ref={containerRef} style={STYLES.container as CSSProperties} />
       <Controls 
         onNext={handleNextStep} 
         onReset={handleReset} 
@@ -507,35 +525,35 @@ export default function TarjanVisualization() {
         isDirected={isDirected}
         onToggleDirection={handleToggleDirection}
       />
-      <div style={{ marginTop: 12, width: '100%' }}>
-        <div style={{ fontWeight: 'bold', marginBottom: 8 }}>自訂圖形</div>
-        <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', flexWrap: 'wrap' }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <div style={{ marginTop: 12, width: '100%' } as CSSProperties}>
+        <div style={{ fontWeight: 'bold', marginBottom: 8 } as CSSProperties}>自訂圖形</div>
+        <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', flexWrap: 'wrap' } as CSSProperties}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8 } as CSSProperties}>
             <span>節點數量</span>
             <input
               type="number"
               min={1}
               value={nodeCountInput}
               onChange={e => setNodeCountInput(e.target.value)}
-              style={{ width: 80 }}
+              style={{ width: 80 } as CSSProperties}
             />
           </label>
-          <div style={{ flex: 1, minWidth: 280 }}>
-            <div style={{ marginBottom: 4 }}>邊清單（每行一條，格式：u v）</div>
+          <div style={{ flex: 1, minWidth: 280 } as CSSProperties}>
+            <div style={{ marginBottom: 4 } as CSSProperties}>邊清單（每行一條，格式：u v）</div>
             <textarea
               value={edgesInput}
               onChange={e => setEdgesInput(e.target.value)}
               rows={6}
-              style={{ width: '100%', fontFamily: 'monospace' }}
+              style={{ width: '100%', fontFamily: 'monospace' } as CSSProperties}
             />
           </div>
         </div>
         {configError && (
-          <div style={{ color: '#ef4444', marginTop: 8 }}>{configError}</div>
+          <div style={{ color: '#ef4444', marginTop: 8 } as CSSProperties}>{configError}</div>
         )}
-        <div style={{ marginTop: 8 }}>
+        <div style={{ marginTop: 8 } as CSSProperties}>
           <button
-            style={{ marginRight: 8 }}
+            style={{ marginRight: 8 } as CSSProperties}
             onClick={() => {
               // Validate and apply configuration
               const n = parseInt(nodeCountInput, 10)
@@ -566,12 +584,10 @@ export default function TarjanVisualization() {
                 return
               }
               setConfigError('')
-              // Apply and reset
               setGraphNodes(newNodes)
               setGraphEdges(parsed)
               setStep(0)
               if (cyRef.current) {
-                // Clear classes to avoid stale styles
                 cyRef.current
                   .edges()
                   .removeClass(EDGE_TYPES.TREE)

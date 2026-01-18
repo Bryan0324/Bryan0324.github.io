@@ -27,6 +27,10 @@
     "hexo-renderer-stylus": "^3.0.1",
     "hexo-server": "^3.0.0",
     "hexo-theme-landscape": "^1.0.0",
-    "hexo-theme-yun": "^1.10.11"
+    "hexo-theme-yun": "^1.10.11",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.8"
   }
 }
