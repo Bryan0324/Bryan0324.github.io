@@ -26,7 +26,7 @@ links:
     color: '#e6cfe6'
   - url: https://chuen666666.github.io/
     avatar: https://chuen666666.github.io/img/avatar.jpg
-    name: 淳
+    blog: 淳
     desc: 群除我佬，我是肺霧
     color: '#1a8bed'
 placeholder: 還沒想好說些什麼
