@@ -1,0 +1,62 @@
+name: Refresh Threads Access Token
+
+on:
+  # 每月 1 號 03:00 UTC 執行
+  schedule:
+    - cron: "0 3 1 * *"
+
+  # 允許手動執行測試
+  workflow_dispatch:
+
+jobs:
+  refresh-token:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Refresh Threads access token
+        shell: bash
+        env:
+          CURRENT_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -Eeuo pipefail
+
+          if [[ -z "${CURRENT_TOKEN}" ]]; then
+            echo "::error::THREADS_ACCESS_TOKEN is not configured."
+            exit 1
+          fi
+
+          if [[ -z "${GH_TOKEN}" ]]; then
+            echo "::error::GH_PAT is not configured."
+            exit 1
+          fi
+
+          echo "Requesting a refreshed Threads access token..."
+
+          RESPONSE="$(
+            curl --fail-with-body --silent --show-error \
+              --get "https://graph.threads.net/refresh_access_token" \
+              --data-urlencode "grant_type=th_refresh_token" \
+              --data-urlencode "access_token=${CURRENT_TOKEN}"
+          )"
+
+          NEW_TOKEN="$(jq -r '.access_token // empty' <<< "${RESPONSE}")"
+          EXPIRES_IN="$(jq -r '.expires_in // empty' <<< "${RESPONSE}")"
+
+          if [[ -z "${NEW_TOKEN}" ]]; then
+            echo "::error::Threads API did not return a new access token."
+            echo "${RESPONSE}" | jq .
+            exit 1
+          fi
+
+          # 將新 token 寫回 GitHub Actions Secret
+          printf '%s' "${NEW_TOKEN}" | \
+            gh secret set THREADS_ACCESS_TOKEN \
+              --repo "${GITHUB_REPOSITORY}" \
+              --body -
+
+          echo "Threads access token refreshed successfully."
+          echo "New token lifetime: ${EXPIRES_IN:-unknown} seconds."
