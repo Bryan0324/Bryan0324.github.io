@@ -1,6 +1,6 @@
 ---
 title: ais3 junior －－ Day1 writeup 和碎碎念(如果有的話)
-date: 2026-08-11
+date: 2026-08-04
 tags: [資安]
 categories: [ais3-junior]
 ---
