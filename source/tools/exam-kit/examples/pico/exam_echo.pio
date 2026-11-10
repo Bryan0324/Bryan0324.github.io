@@ -1,0 +1,7 @@
+; One TX word -> one RX word. CPU enables autopull but disables autopush.
+.program exam_echo
+.wrap_target
+    out x, 32
+    in x, 32
+    push block
+.wrap
