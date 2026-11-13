@@ -40,6 +40,8 @@ description: 拆解上機考題的介面、可改範圍、評分依賴與最小�
 
 | 狀況 | 下一份技能 | 最重要資料 |
 |---|---|---|
+| 看不懂程式片段／呼叫關係 | S9 ncku-code-reading | 語言、宣告、片段、呼叫端、想理解的點 |
+| 邏輯／執行錯誤但根因未明 | S10 ncku-debug-analysis | 最小輸入、預期依據、實際／traceback、呼叫順序 |
 | 工具、import、編譯、連結、燒錄錯 | S1 ncku-build-debug | 指令、執行位置、第一個錯誤、建置設定 |
 | ROS 不通或補 pub/sub | S2 ncku-ros-dataflow | 真實 message、topic、node info、QoS、骨架 |
 | ISA／二進位欄位 | S3 ncku-isa-binary | 欄位圖、架構、位寬、符號、PC |

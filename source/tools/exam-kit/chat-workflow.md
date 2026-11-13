@@ -10,6 +10,8 @@
 | 現象 | 短卡入口（同頁下方有詳解） |
 |---|---|
 | 新題／不知從哪開始 | [S0](skills/ncku-exam-triage/#短提示卡) |
+| 看不懂程式碼片段／想逐步追值 | [S9 程式解讀](skills/ncku-code-reading/#短提示卡) |
+| 結果錯／例外／卡住，尚不知哪一層有問題 | [S10 分析 Debug](skills/ncku-debug-analysis/#短提示卡) |
 | 工具／import／編譯／燒錄錯 | [S1](skills/ncku-build-debug/#短提示卡) |
 | ROS沒資料／補callback | [S2](skills/ncku-ros-dataflow/#短提示卡) |
 | ISA／立即數／欄位格式 | [S3](skills/ncku-isa-binary/#短提示卡) |
@@ -22,6 +24,8 @@
 | 對話長了／換題／重新開啟 | [交接模板](prompts/#交接模板)：核對事實與最新版本再貼 |
 
 只複製短卡的文字區塊，保留末尾填空；不要一次複製整頁詳解。所有卡片亦可從 [prompts 總索引](prompts/) 找到。
+
+S9 用來看懂目前行為，先不要求改碼；S10 用「預期 vs 實際」定位並修錯。S1 處理工具／建置階段，S7 處理已確定的算法／資料格式。若用 S9 看出可疑處，下一輪補規格與失敗案例再交 S10，不把推測直接當 bug。
 
 ## 2. 三輪工作節奏
 
@@ -48,6 +52,8 @@
 
 | 問題 | 先貼的最小完整關係 | 暫時不必貼 |
 |---|---|---|
+| 看不懂片段 | 語言、完整函式、相關型別／宣告、呼叫端、想理解的點 | 無關檔案；缺定義的 API 可先標未知 |
+| 邏輯／執行錯誤 | 目前版本、最小失敗輸入、預期依據、實際輸出／traceback、相關呼叫順序 | 大量正常日誌；不能省掉跨次狀態所需的前次呼叫 |
 | 編譯錯 | 指令、第一個error及上下文、該符號宣告、出錯函式 | 全部build log、無關檔案 |
 | ROS callback | message欄位、pub/sub建立碼、callback、必要spin設定 | 整個package、無關節點 |
 | PIO | 短PIO程式、shift/FIFO/wrap/enable、CPU收送 | 不相關GPIO或其他周邊設定 |
