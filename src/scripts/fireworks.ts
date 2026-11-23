@@ -26,10 +26,13 @@ export function initFireworks(canvas: HTMLCanvasElement, colors: string[]) {
     ctx.setTransform(scale, 0, 0, scale, 0, 0);
   };
   const draw = (now: number) => {
+    // This callback is no longer pending; a drawing error must not block future clicks.
+    frame = 0;
     ctx.clearRect(0, 0, width, height);
     bursts = bursts.filter((burst) => now - burst.start < Math.max(burst.duration, burst.ringDuration));
     for (const burst of bursts) {
-      const elapsed = now - burst.start;
+      // RAF timestamps can precede a pointer event processed in the same frame.
+      const elapsed = Math.max(0, now - burst.start);
       if (elapsed < burst.duration) {
         const progress = easeOutExpo(elapsed / burst.duration);
         for (const particle of burst.particles) {
