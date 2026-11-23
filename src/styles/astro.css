@@ -1,0 +1,79 @@
+/* Astro additions to Yun's original MIT-licensed Stylus styles. */
+:root { color-scheme: light; }
+html.dark { color-scheme: dark; }
+* { box-sizing: border-box; }
+body { color: var(--hty-text-color); overflow-wrap: break-word; }
+button, input { font: inherit; }
+button { cursor: pointer; color: inherit; background: transparent; border: 0; }
+:focus-visible { outline: 2px solid var(--smc-link-color); outline-offset: 4px; }
+.icon { width: 1.4em; height: 1.4em; vertical-align: middle; }
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.text-center { text-align: center; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.skip-link { position: fixed; top: -5rem; z-index: 1000; background: var(--post-block-bg-color); padding: .5rem 1rem; }
+.skip-link:focus { top: 0; }
+.sidebar-overlay { display: none; padding: 0; }
+.sidebar-open .sidebar-overlay { display: block; }
+.sidebar-tools { display: flex; justify-content: center; gap: 1rem; padding: 1rem; }
+.site-info { padding-top: 1.5rem; }
+.site-author-avatar img { object-fit: cover; }
+.site-state { display: flex; align-items: center; justify-content: center; }
+.site-state-item { display: inline-flex; flex-direction: column; padding: .5rem; }
+.astro-toc { text-align: left; list-style: none; padding: 0 .5rem; font-size: .9rem; }
+.astro-toc a { display: block; color: var(--hty-secondary-text-color); }
+.astro-toc a.active { color: var(--smc-link-color); font-weight: bold; }
+.sidebar-nav button { font-size: .9rem; }
+.page-header { padding: 2rem 1rem 0; text-align: center; }
+.page-header h1 { margin: 0; }
+.post-card { width: min(900px, calc(100% - 2rem)); }
+.post-card__actions { gap: 1rem; flex-wrap: wrap; }
+.post-card-tag, .post-card-category { display: flex; flex-wrap: wrap; gap: .5rem; }
+.tag-item, .category-item { color: var(--smc-link-color); }
+.post-card-content .hty-button { margin: .5rem; background: var(--smc-link-color); color: white; }
+#post, #page { padding-top: 1rem; }
+.post-header { padding: 1rem; }
+.post-title { overflow-wrap: anywhere; }
+.post-content { line-height: 1.9; min-width: 0; }
+.markdown-body img { max-width: 100%; height: auto; }
+.markdown-body pre { position: relative; max-width: 100%; overflow-x: auto; padding: 2.5rem 1rem 1rem; }
+.markdown-body pre code { white-space: pre; }
+.markdown-body .katex-display { overflow-x: auto; overflow-y: hidden; padding: .5rem 0; }
+.markdown-body table { display: block; overflow-x: auto; max-width: 100%; }
+.markdown-body :is(h1, h2, h3, h4, h5, h6) { scroll-margin-top: 1rem; }
+html.dark .astro-code, html.dark .astro-code span { color: var(--shiki-dark) !important; background-color: var(--shiki-dark-bg) !important; }
+.copy-code { position: absolute; top: .25rem; right: .5rem; font-size: .8rem; background: var(--post-block-bg-color); color: var(--hty-text-color); border-radius: .25rem; padding: .15rem .5rem; }
+.post-taxonomies { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 1rem; }
+.article-navigation { display: flex; justify-content: space-between; gap: 2rem; margin: 1rem; padding: 1rem; background: var(--post-card-bg-color); }
+.article-navigation > div { flex: 1; }
+.article-navigation > div:last-child { text-align: right; }
+.taxonomy-cloud { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem 2rem; padding: 3rem 1rem; }
+.taxonomy-cloud a { font-size: 1.3rem; }
+.friend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; padding: 1rem; }
+.friend-card { display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid #8884; border-radius: .5rem; }
+.friend-card img { border-radius: 50%; object-fit: cover; }
+.friend-card p { font-size: .9rem; margin: 0; color: var(--hty-secondary-text-color); }
+.comments { margin: 1rem; padding: 1.5rem; background: var(--post-block-bg-color); }
+.comments h2 { font-size: 1.2rem; }
+.footer { text-align: center; font-size: .9rem; padding-top: 2rem; padding-bottom: 2rem; }
+.back-to-top { position: fixed; bottom: 1rem; right: 1rem; z-index: 10; background: var(--post-block-bg-color); border-radius: 50%; }
+.empty-state { text-align: center; padding: 2rem; }
+#search-dialog { width: min(700px, calc(100% - 2rem)); max-height: 80vh; border: 1px solid #8885; border-radius: .75rem; background: var(--post-block-bg-color); color: var(--hty-text-color); padding: 1.5rem; }
+#search-dialog::backdrop { background: #0009; backdrop-filter: blur(6px); }
+.search-heading { display: flex; justify-content: space-between; align-items: center; }
+.search-heading h2 { font-size: 1.5rem; margin: 0; }
+#search-input { width: 100%; padding: .6rem; margin-top: 1rem; color: inherit; background: var(--hty-bg-color); border: 1px solid #8888; border-radius: .25rem; }
+#search-status { font-size: .9rem; opacity: .8; }
+#search-results { list-style: none; padding: 0; }
+#search-results li { border-top: 1px solid #8884; padding: .75rem 0; }
+#search-results p { font-size: .9rem; margin: .25rem 0; }
+.click-particle { position: fixed; width: 6px; height: 6px; border-radius: 50%; pointer-events: none; z-index: 999; }
+@media (max-width: 767px) {
+  .post-card { width: calc(100% - 1rem); }
+  .post-title { font-size: 1.6rem; }
+  .article-navigation { gap: 1rem; }
+  #page { margin: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}

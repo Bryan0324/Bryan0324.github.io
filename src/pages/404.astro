@@ -1,0 +1,5 @@
+---
+import Base from '../layouts/Base.astro';
+import { theme } from '../lib/config.mjs';
+---
+<Base title="404"><section id="page" class="hty-card empty-state"><h1>404</h1><p>{theme['404']?.message || '這裡還沒有種貓草，找不到頁面喵～'}</p><a href="/">回到首頁</a></section></Base>

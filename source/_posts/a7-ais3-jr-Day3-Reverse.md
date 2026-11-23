@@ -7,11 +7,11 @@ categories: [ais3-junior]
 
 # Reverse-1
 
-![reverse-1](/img/a7-ais3-jr-Day3-Reverse/1-reverse-1.png)
+![reverse-1](/img/a7-ais3-jr-Day3-Reverse/2-reverse-1.png)
 
 點兩下check_password來看這個函數的內容
 
-![flag](/img/a7-ais3-jr-Day3-Reverse/2-reverse-1-flag.png)
+![flag](/img/a7-ais3-jr-Day3-Reverse/1-reverse-1-flag.png)
 
 
 # Reverse-2

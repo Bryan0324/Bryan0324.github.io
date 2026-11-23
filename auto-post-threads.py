@@ -38,8 +38,8 @@ def load_secrets() -> dict[str, str | bool | dict | None]:
 
 # 從 git hook 傳進來的參數
 commit_message = sys.argv[1]
-added_files = sys.argv[2].split("./public/")[1:]
-modified_files = sys.argv[3].split("./public/")[1:]
+added_files = sys.argv[2].split("./dist/")[1:]
+modified_files = sys.argv[3].split("./dist/")[1:]
 
 # 取得 secrets（優先使用 env）
 secrets = load_secrets()

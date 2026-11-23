@@ -1,0 +1,24 @@
+---
+import { postUrl, taxonomyUrl, plainText, type Post } from '../lib/content';
+import { theme } from '../lib/config.mjs';
+import PostMeta from './PostMeta.astro';
+interface Props { post: Post; }
+const { post } = Astro.props;
+const external = post.data.type && post.data.url;
+const excerpt = post.data.description || plainText(post.body?.split('<!-- more -->')[0]).slice(0, 180);
+---
+<article class="post-card">
+  {(post.data.top || post.data.sticky) && <span class="post-top-icon" title="置頂">📌</span>}
+  <div class="post-card-header"><header class="post-header">
+    <h2 class="post-title"><a class="post-title-link" href={external || postUrl(post)} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}>{post.data.title}</a></h2>
+    <PostMeta entry={post} />
+  </header></div>
+  <div class="post-card-content text-center">
+    <p class="post-card-excerpt">{excerpt}{excerpt.length === 180 ? '…' : ''}</p>
+    <a class="hty-button hty-button--raised" href={postUrl(post)}>閱讀全文</a>
+  </div>
+  <div class="hty-card__actions post-card__actions">
+    <div class="post-card-category">{theme.post_meta.categories && post.data.categories.map((name) => <a class="category-item" href={taxonomyUrl('categories', name)}>▱ {name}</a>)}</div>
+    <div class="post-card-tag">{theme.post_meta.tags && post.data.tags.map((name) => <a class="tag-item" href={taxonomyUrl('tags', name)}># {name}</a>)}</div>
+  </div>
+</article>

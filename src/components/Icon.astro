@@ -1,0 +1,7 @@
+---
+import { icons } from '@iconify-json/ri';
+interface Props { name: string; }
+const { name } = Astro.props;
+const icon = icons.icons[name.replace(/^ri:/, '') as keyof typeof icons.icons] || icons.icons['link'];
+---
+<svg class="icon" viewBox={`0 0 ${icons.width || 24} ${icons.height || 24}`} aria-hidden="true" fill="currentColor" set:html={icon?.body} />

@@ -18,20 +18,11 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Use Node.js 20
+      - name: Use Node.js 22
         uses: actions/setup-node@v4
         with:
-          # Examples: 20, 18.19, >=16.20.2, lts/Iron, lts/Hydrogen, *, latest, current, node
-          # Ref: https://github.com/actions/setup-node#supported-version-syntax
-          node-version: "20"
-
-      - name: Cache NPM dependencies
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-npm-cache
-          restore-keys: |
-            ${{ runner.OS }}-npm-cache
+          node-version: "22"
+          cache: npm
 
       - name: Install dependencies
         run: |
@@ -43,7 +34,7 @@ jobs:
           -i https://test.pypi.org/simple \
           --extra-index-url https://pypi.org/simple
           pip install pandas
-          npm install
+          npm ci
           npm run build
       # Use Actions Secrets directly; do not write secret.json in runner
       - name: Determine commit message and changed files
@@ -102,8 +93,8 @@ jobs:
             if [ "$filename" = "$(basename "$file")" ]; then
               filename=$(basename "$file" .md)
             fi
-            # Search for matching directory in public folder
-            local public_path=$(find ./public -type d -name "$filename" 2>/dev/null | head -1)
+            # Search for the matching Astro output directory
+            local public_path=$(find ./dist -type d -name "$filename" 2>/dev/null | head -1)
             echo "$public_path"
           }
           

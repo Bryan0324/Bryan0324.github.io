@@ -1,0 +1,2 @@
+/* The Yun integration compiles the original Stylus into this CSS entry.
+   Keep a real file so Astro can discover and serve it in development too. */

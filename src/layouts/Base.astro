@@ -1,0 +1,65 @@
+---
+import type { MarkdownHeading } from 'astro';
+import { site, theme } from '../lib/config.mjs';
+import Sidebar from '../components/Sidebar.astro';
+import Icon from '../components/Icon.astro';
+import 'star-markdown-css/dist/yun/yun-markdown.min.css';
+import 'katex/dist/katex.min.css';
+import '../styles/yun.css';
+import '../styles/astro.css';
+interface Props { title?: string; description?: string | null; home?: boolean; headings?: MarkdownHeading[]; image?: string; }
+const { title, description, home, headings } = Astro.props;
+const pageTitle = title ? `${title} | ${site.title}` : site.title;
+const canonical = new URL(Astro.url.pathname.replace(/\.html\/$/, '.html'), site.url);
+---
+<!doctype html>
+<html lang={site.language || 'zh-TW'} class={theme.mode === 'dark' ? 'dark' : theme.mode === 'sunset' ? 'sunset' : ''} data-mode={theme.mode}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="author" content={site.author} />
+    <meta name="description" content={description || site.description || site.subtitle} />
+    <meta name="theme-color" content={theme.colors.primary} />
+    <title>{pageTitle}</title>
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description || site.description || site.subtitle} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={site.title} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href={theme.favicon || '/grass_cat.png'} />
+    {theme.font.cdn.enable && theme.font.cdn.lib.map((url: string) => <link rel="stylesheet" href={url} />)}
+    <script is:inline>
+      (() => {
+        let mode = document.documentElement.dataset.mode;
+        try { mode = localStorage.getItem('darken-mode') || mode; } catch {}
+        if (mode === 'auto') mode = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        if (mode === 'time') { const h = new Date().getHours(); mode = h >= 20 || h < 7 ? 'dark' : h >= 17 ? 'sunset' : 'light'; }
+        document.documentElement.classList.remove('dark', 'sunset');
+        if (mode === 'dark' || mode === 'sunset') document.documentElement.classList.add(mode);
+      })();
+    </script>
+  </head>
+  <body class:list={{ 'is-home': home }} data-fireworks={theme.fireworks.enable ? JSON.stringify(theme.fireworks.colors) : undefined} data-mermaid={String(theme.mermaid.enable)} data-reveal={String(theme.scrollreveal.enable)}>
+    <a class="skip-link" href="#content">跳至主要內容</a>
+    <div class="container">
+      <Sidebar headings={headings} />
+      <main id="content" class="sidebar-translate"><slot /></main>
+      <footer class="footer sidebar-translate">
+        <div>© {theme.footer.since}–{new Date().getFullYear()} ☁ {site.author}</div>
+        <div>由 <a href="https://astro.build/">Astro</a> 驅動 · 主題 <a href="https://github.com/YunYouJun/hexo-theme-yun">Yun</a>（Astro 移植）</div>
+        {theme.footer.live_time.enable && <div>{theme.footer.live_time.prefix} <span id="live-time" data-start={theme.footer.live_time.start_time}></span> {theme.footer.live_time.suffix}</div>}
+      </footer>
+    </div>
+    <a class="back-to-top hty-icon-button" href="#content" aria-label="回到頂部"><Icon name="ri:arrow-up-s-line" /></a>
+    {theme.local_search.enable && <dialog id="search-dialog" aria-labelledby="search-title">
+      <div class="search-heading"><h2 id="search-title">搜尋文章</h2><button data-search-close aria-label="關閉搜尋">✕</button></div>
+      <label class="sr-only" for="search-input">搜尋關鍵字</label>
+      <input id="search-input" type="search" placeholder={theme.search.placeholder} autocomplete="off" />
+      <p id="search-status" role="status">輸入關鍵字搜尋標題與內文</p>
+      <ul id="search-results"></ul>
+    </dialog>}
+    <script src="../scripts/client.ts"></script>
+  </body>
+</html>

@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState, useMemo, CSSProperties } from 'react'
-import cytoscape, { Core } from 'cytoscape'
+import React, { useEffect, useRef, useState, useMemo, type CSSProperties } from 'react'
+import cytoscape, { type Core } from 'cytoscape'
 
 // ============================================================================
 // Types

@@ -1,0 +1,19 @@
+---
+import { theme } from '../lib/config.mjs';
+import Icon from './Icon.astro';
+const title = [...theme.banner.title];
+---
+<section id="banner" aria-label={theme.banner.title}>
+  <div class="banner-line vertical-line-top" style={`--banner-line-height:calc(50vh - ${title.length * 1.25}rem);animation-name:extend-line`}></div>
+  <div class="banner-char-container" aria-hidden="true">
+    {title.map((char, index) => <div class:list={['char-box', index % 2 ? 'char-right' : 'char-left']} style={`--banner-char-size:2.5rem;animation-name:char-move-${index % 2 ? 'right' : 'left'}`}><span class="char">{char}</span></div>)}
+  </div>
+  <div class="banner-line vertical-line-bottom" style={`--banner-line-height:calc(50vh - ${title.length * 1.25}rem);animation-name:extend-line`}></div>
+  {theme.banner.cloud.enable && <div class="cloud" aria-hidden="true">
+    <svg class="waves" viewBox="0 24 150 28" preserveAspectRatio="none">
+      <defs><path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" fill={theme.banner.cloud.color} /></defs>
+      <g class="parallax">{[0, 3, 5, 7].map((y, i) => <use href="#gentle-wave" x="48" y={y} opacity={[0.7, 0.5, 0.3, 1][i]} />)}</g>
+    </svg>
+  </div>}
+  {theme.banner.go_down.enable && <a id="goDown" href="#recent-posts" aria-label="瀏覽文章"><Icon name={theme.banner.go_down.icon} /></a>}
+</section>

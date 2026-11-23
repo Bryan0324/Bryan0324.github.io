@@ -1,0 +1,8 @@
+---
+import { theme } from '../lib/config.mjs';
+const config = theme.giscus;
+---
+{theme.comment.enable && config.enable && <section class="comments hty-card" aria-label="留言">
+  <h2>留下點回憶吧！</h2>
+  <div id="giscus" data-config={JSON.stringify(config)}></div>
+</section>}

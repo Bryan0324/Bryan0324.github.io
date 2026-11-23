@@ -1,4 +1,4 @@
-name: Pages
+name: Astro Pages
 
 on:
   push:
@@ -14,27 +14,25 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           # If your repository depends on submodule, please see: https://github.com/actions/checkout
           submodules: recursive
-      - name: Use Node.js 20
+      - name: Use Node.js 22
         uses: actions/setup-node@v4
         with:
-          # Examples: 20, 18.19, >=16.20.2, lts/Iron, lts/Hydrogen, *, latest, current, node
-          # Ref: https://github.com/actions/setup-node#supported-version-syntax
-          node-version: "20"
-      - name: Cache NPM dependencies
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-npm-cache
-          restore-keys: |
-            ${{ runner.OS }}-npm-cache
+          node-version: "22"
+          cache: npm
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
+      - name: Check
+        run: npm run check
+      - name: Test
+        run: npm test
       - name: Build
         run: npm run build
+      - name: Verify generated site
+        run: npm run verify
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./public
+          path: ./dist
   deploy:
     needs: build
     permissions:

@@ -1,0 +1,11 @@
+---
+import type { Entry } from '../lib/content';
+import { formatDate } from '../lib/content';
+import { theme } from '../lib/config.mjs';
+interface Props { entry: Entry; }
+const { data } = Astro.props.entry;
+---
+<div class="post-meta">
+  {data.date && theme.post_meta.created_at && <span>發表於 <time datetime={formatDate(data.date)}>{formatDate(data.date)}</time></span>}
+  {data.updated && theme.post_meta.updated_at && <span> · 更新於 <time datetime={formatDate(data.updated)}>{formatDate(data.updated)}</time></span>}
+</div>
