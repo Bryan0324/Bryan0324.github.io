@@ -1,8 +1,13 @@
 ---
 import { taxonomyUrl, type Post } from '../lib/content';
-import { theme } from '../lib/config.mjs';
+import { site, theme } from '../lib/config.mjs';
 interface Props { groups: [string, Post[]][]; amount?: number; }
-const groups = [...Astro.props.groups].sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0).slice(0, Astro.props.amount || 200);
+const limit = Astro.props.amount || 200;
+// Select by frequency before sorting labels, so the limit does not exclude CJK tags.
+const groups = [...Astro.props.groups]
+  .sort(([a, aPosts], [b, bPosts]) => bPosts.length - aPosts.length || a.localeCompare(b, site.language))
+  .slice(0, limit)
+  .sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0);
 const counts = [...new Set(groups.map(([, posts]) => posts.length))].sort((a, b) => a - b);
 const rgb = (hex: string) => {
   const value = hex.replace('#', '');
