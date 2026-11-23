@@ -28,7 +28,7 @@ const schema = z.object({
 
 export const collections = {
   posts: defineCollection({
-    loader: glob({ pattern: '**/*.{md,mdx}', base: './source/_posts', generateId: ({ entry }) => entry.replace(/\.mdx?$/, '') }),
+    loader: glob({ pattern: '**/*.{md,mdx}', base: './source/_posts', generateId: ({ entry }) => entry.replaceAll('\\', '/').replace(/\/index\.mdx?$|\.mdx?$/, '') }),
     schema,
   }),
   pages: defineCollection({

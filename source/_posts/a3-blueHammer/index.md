@@ -22,7 +22,7 @@ TOCTOU 是 Time of Check to Time of Use 的縮寫
 簡單來說 就是
 **當程式在檢查某個條件的時候** 和 **實際使用該條件的時候** 之間存在時間差
 如附圖所示
-![alt text](/img/a3-blueHammer/01-timeline.png)
+![alt text](./01-timeline.png)
 攻擊者可以利用這個時間差來改變條件的狀態
 舉例
 像是這個程式不能在管理員權限下執行

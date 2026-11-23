@@ -13,7 +13,7 @@ let posts = 0;
 for (const file of files(resolve('source/_posts')).filter((file) => /\.mdx?$/.test(file))) {
   const { data, content } = matter(readFileSync(file, 'utf8'));
   if ((!data.title && !content.trim()) || data.draft) continue;
-  const id = relative(resolve('source/_posts'), file).replaceAll('\\', '/').replace(/\.mdx?$/, '');
+  const id = relative(resolve('source/_posts'), file).replaceAll('\\', '/').replace(/\/index\.mdx?$|\.mdx?$/, '');
   const path = postPath(id, data, site);
   const target = path.endsWith('.html') ? resolve(output, path) : resolve(output, path, 'index.html');
   assert.ok(existsSync(target), `Missing article: ${id} (${path})`);

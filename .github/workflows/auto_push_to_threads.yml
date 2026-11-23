@@ -93,6 +93,10 @@ jobs:
             if [ "$filename" = "$(basename "$file")" ]; then
               filename=$(basename "$file" .md)
             fi
+            # Folder-per-post: source/_posts/<slug>/index.md -> <slug>
+            if [ "$filename" = "index" ]; then
+              filename=$(basename "$(dirname "$file")")
+            fi
             # Search for the matching Astro output directory
             local public_path=$(find ./dist -type d -name "$filename" 2>/dev/null | head -1)
             echo "$public_path"

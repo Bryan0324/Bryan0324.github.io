@@ -11,20 +11,20 @@ IOAITW選上選訓營了，打算練習一下歷屆。
 
 他有給我範例程式碼，當然要跑跑看 ~~或許跑下去就直接通過了~~  
 
-![Baseline](/img/a4-kaggle_radar-ioai-2025/Baseline.png)  
+![Baseline](./Baseline.png)  
 
 天下沒有白吃的午餐 跑出來的分數是 0.6
 比想像中的好就是了
 
 那下一步就是看看他的loss了
 
-![Baseline_loss](/img/a4-kaggle_radar-ioai-2025/Baseline_loss.png)
+![Baseline_loss](./Baseline_loss.png)
 
 看起來很好啊 loss測試和訓練都在下降 沒有過擬合的跡象 而且loss很低
 
 那為什麼分數只有0.6
 
-![Evaluation](/img/a4-kaggle_radar-ioai-2025/Evaluation.png)
+![Evaluation](./Evaluation.png)
 
 原來是因為評分標準的差異
 
@@ -42,7 +42,7 @@ criterion = nn.CrossEntropyLoss(weight=weights)
 
 加權之後分數就上去了
 
-![weighted](/img/a4-kaggle_radar-ioai-2025/weighted.png)
+![weighted](./weighted.png)
 
 0.86 官解是 0.87 
 
@@ -50,10 +50,10 @@ criterion = nn.CrossEntropyLoss(weight=weights)
 但實際train卻用40而已
 試試看100好了
 
-![](/img/a4-kaggle_radar-ioai-2025/epoch_100.png)
+![](./epoch_100.png)
 哈 超過官解了
 
-![epoch_100_loss](/img/a4-kaggle_radar-ioai-2025/epoch_100_loss.png)
+![epoch_100_loss](./epoch_100_loss.png)
 可以注意到loss在後期有鋸齒狀的波動
 所以可能要動態調整學習率了(後期跨幅過大了)
 
@@ -74,7 +74,7 @@ scheduler = ReduceLROnPlateau(
 # 然後把所有optimizer.step()的地方改成 scheduler.step(val_loss) 就好了
 ```
 
-![where_is_my_Grad](/img/a4-kaggle_radar-ioai-2025/where_is_my_Grad.png)
+![where_is_my_Grad](./where_is_my_Grad.png)
 
 挺糟糕的看起來是梯度消失了
 

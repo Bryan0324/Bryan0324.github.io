@@ -11,20 +11,20 @@ categories: [ais3-junior]
 `aaa`
 `VV`
 
-![alt text](/img/a8-ais3-jr-Day3-Pwn/1-1.png)
+![alt text](./1-1.png)
 
 password到is_admin
 0x20 - 0x8 = 0x18 == 24
 
-![alt text](/img/a8-ais3-jr-Day3-Pwn/1-2.png)
+![alt text](./1-2.png)
 
 當值為`0xcafebabe`就會爆出flag
 
-![alt text](/img/a8-ais3-jr-Day3-Pwn/1-3.png)
+![alt text](./1-3.png)
 
 測試通過了
 
-![alt text](/img/a8-ais3-jr-Day3-Pwn/1-4.png)
+![alt text](./1-4.png)
 
 實際測試的時候少擷取到一行
 
@@ -33,25 +33,25 @@ password到is_admin
 `r2 ./00-challenges/AIS3-jr/hw/pwn/pwn02_local.out`
 `aaa`
 `VV`
-![alt text](/img/a8-ais3-jr-Day3-Pwn/2-1.png)
+![alt text](./2-1.png)
 沒有flag的跡象，題目說會有win function
 `afl`列出所有function
-![alt text](/img/a8-ais3-jr-Day3-Pwn/2-2.png)
+![alt text](./2-2.png)
 
 `0x00401156    1 26           dbg.win`
 `s dbg.win`
-![alt text](/img/a8-ais3-jr-Day3-Pwn/2-3.png)
+![alt text](./2-3.png)
 | 變數  | 位置  |
 | --- | --- |
 | buf | rbp - 0x20 |
 | Saved RBP |  rbp  |
 | Return Address | rbp + 0x08 |
 
-![alt text]![alt text](/img/a8-ais3-jr-Day3-Pwn/2-4.png)
+![alt text]![alt text](./2-4.png)
 
 測試成功
 
-![alt text](/img/a8-ais3-jr-Day3-Pwn/2-5.png)
+![alt text](./2-5.png)
 ```py    
 import pwn
 r = pwn.remote("165.154.226.158", "11038")

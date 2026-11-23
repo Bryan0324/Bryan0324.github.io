@@ -22,10 +22,10 @@ GitHub Pages workflow 會檢查、建置並發佈 `dist/`。儲存庫 Pages 的�
 
 ## 寫文章與設定
 
-- 文章：`source/_posts/*.{md,mdx}`，必填 `title`、`date`；支援 `description`、`updated`、`tags`、`categories`、`comments`、`toc`、`top` / `sticky`、`hide`、`draft`、`slug`、`permalink`。
+- 文章：`source/_posts/<slug>/index.{md,mdx}`，每篇文章一個資料夾，可將圖片與文章放在同一資料夾並以相對路徑引用（例如 `./image.png`）。必填 `title`、`date`；支援 `description`、`updated`、`tags`、`categories`、`comments`、`toc`、`top` / `sticky`、`hide`、`draft`、`slug`、`permalink`。
 - `draft: true` 不產生頁面；`hide: true` 產生頁面但不列入清單、搜尋與標籤；空白檔案略過。
 - 頁面：`source/about/`、`source/friends/` 等。`index.md(x)` 對應目錄首頁，其餘對應 `.html`，例如 `/about/site.html`。
-- 圖片與其他靜態資源：放在 `source/`，例如 `source/img/`、`source/grass_cat.png`。建置時自動收集至 `.astro-static/`；請勿直接編輯該目錄。
+- 其他靜態資源：放在 `source/`，例如 `source/grass_cat.png`。建置時自動收集至 `.astro-static/`；請勿直接編輯該目錄。文章圖片建議放在文章資料夾內。
 - 網站設定：`_config.yml` 的標題、作者、語言、時區、網址、文章網址格式與每頁數量。
 - 主題設定：`_config.yun.yml`，預設值來自 `themes/yun/_config.yml`。修改 YAML 後重新啟動開發伺服器。
 - React 元件：`source/components/`，MDX 內以相對路徑匯入。移植層會為大寫名稱的 JSX 元件補上 `client:visible`，亦可自行指定 `client:load` 等指令。
