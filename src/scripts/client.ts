@@ -1,3 +1,5 @@
+import { initFireworks } from './fireworks';
+
 const root = document.documentElement;
 const container = document.querySelector('.container')!;
 const menu = document.querySelector<HTMLButtonElement>('#menu-btn')!;
@@ -11,6 +13,7 @@ function setSidebar(open: boolean) {
   container.classList.toggle('sidebar-open', open);
   menu.setAttribute('aria-expanded', String(open));
   menu.setAttribute('aria-label', open ? '關閉選單' : '開啟選單');
+  menu.querySelector('.hamburger')?.classList.toggle('is-active', open);
   syncSidebar();
 }
 syncSidebar();
@@ -81,7 +84,8 @@ if (dialog) {
   const results = dialog.querySelector<HTMLUListElement>('#search-results')!;
   let index: Promise<SearchEntry[]> | undefined;
   let request = 0;
-  document.querySelectorAll('[data-search-open]').forEach((button) => button.addEventListener('click', () => { dialog.showModal(); input.focus(); }));
+  document.querySelectorAll('[data-search-open]').forEach((button) => button.addEventListener('click', () => { dialog.showModal(); dialog.classList.add('show'); input.focus(); }));
+  dialog.addEventListener('close', () => dialog.classList.remove('show'));
   dialog.querySelector('[data-search-close]')!.addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', (event) => { if (event.target === dialog) { const rect = dialog.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close(); } });
   input.addEventListener('input', async () => {
@@ -98,16 +102,29 @@ if (dialog) {
       const entries = await index;
       if (generation !== request) return;
       const terms = query.split(/\s+/);
+      const highlight = (target: HTMLElement, value: string) => {
+        const pattern = new RegExp(`(${terms.map((term) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'gi');
+        value.split(pattern).forEach((part, index) => {
+          if (index % 2) {
+            const mark = document.createElement('mark');
+            mark.className = 'search-keyword';
+            mark.textContent = part;
+            target.append(mark);
+          } else target.append(document.createTextNode(part));
+        });
+      };
       const matches = entries.filter((post) => terms.every((term) => `${post.title} ${post.content} ${post.tags.join(' ')}`.toLocaleLowerCase().includes(term)));
       status.textContent = matches.length ? `找到 ${matches.length} 篇文章` : '沒有找到相關文章';
       for (const post of matches) {
         const li = document.createElement('li');
         const link = document.createElement('a');
         link.href = post.url;
-        link.textContent = post.title;
+        highlight(link, post.title);
+        link.className = 'search-result-title';
         const excerpt = document.createElement('p');
+        excerpt.className = 'search-result';
         const offset = Math.max(0, post.content.toLocaleLowerCase().indexOf(terms[0]) - 35);
-        excerpt.textContent = `${offset ? '…' : ''}${post.content.slice(offset, offset + 180)}…`;
+        highlight(excerpt, `${offset ? '…' : ''}${post.content.slice(offset, offset + 180)}…`);
         li.append(link, excerpt);
         results.append(li);
       }
@@ -121,8 +138,9 @@ if (dialog) {
 document.querySelectorAll<HTMLElement>('.markdown-body pre').forEach((pre) => {
   const code = pre.querySelector('code');
   if (!code) return;
+  pre.classList.add('code-container');
   const button = document.createElement('button');
-  button.className = 'copy-code';
+  button.className = 'copy-btn';
   button.textContent = '複製';
   button.setAttribute('aria-label', '複製程式碼');
   button.addEventListener('click', async () => {
@@ -138,7 +156,10 @@ if (headings.length) {
   const observer = new IntersectionObserver((entries) => {
     const active = entries.find((entry) => entry.isIntersecting);
     if (!active) return;
-    document.querySelectorAll<HTMLAnchorElement>('.astro-toc a').forEach((link) => link.classList.toggle('active', decodeURIComponent(link.hash.slice(1)) === active.target.id));
+    document.querySelectorAll('.post-toc .toc-item').forEach((item) => item.classList.remove('active'));
+    const link = [...document.querySelectorAll<HTMLAnchorElement>('.post-toc .toc-link')].find((link) => decodeURIComponent(link.hash.slice(1)) === active.target.id);
+    let item = link?.closest('.toc-item');
+    while (item) { item.classList.add('active'); item = item.parentElement?.closest('.toc-item'); }
   }, { rootMargin: '0px 0px -65% 0px' });
   headings.forEach((heading) => observer.observe(heading));
 }
@@ -169,18 +190,31 @@ if (document.body.dataset.reveal === 'true' && !matchMedia('(prefers-reduced-mot
   });
   document.querySelectorAll('.post-card, .markdown-body img').forEach((element) => observer.observe(element));
 }
-if (document.body.dataset.fireworks && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  const colors: string[] = JSON.parse(document.body.dataset.fireworks);
-  document.addEventListener('click', (event) => {
-    if (!event.detail) return;
-    for (let i = 0; i < 10; i++) {
-      const dot = document.createElement('i');
-      dot.className = 'click-particle';
-      dot.style.cssText = `left:${event.clientX}px;top:${event.clientY}px;background:rgb(${colors[i % colors.length]})`;
-      document.body.append(dot);
-      const angle = Math.random() * Math.PI * 2;
-      const distance = 20 + Math.random() * 70;
-      dot.animate([{ transform: 'translate(-50%, -50%)', opacity: 1 }, { transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) scale(0)`, opacity: 0 }], { duration: 600 + Math.random() * 400, easing: 'ease-out' }).onfinish = () => dot.remove();
-    }
+const canvas = document.querySelector<HTMLCanvasElement>('.fireworks');
+if (canvas && document.body.dataset.fireworks) initFireworks(canvas, JSON.parse(document.body.dataset.fireworks));
+
+const banner = document.querySelector('#banner');
+if (banner) {
+  let total = 0;
+  banner.querySelectorAll<HTMLElement>('.char-box').forEach((box) => {
+    const size = 1.5 + Math.random() * 2;
+    box.style.setProperty('--banner-char-size', `${size}rem`);
+    box.style.setProperty('--banner-empty-border-size', getComputedStyle(box).width);
+    total += size;
   });
+  banner.querySelectorAll<HTMLElement>('.banner-line').forEach((line) => line.style.setProperty('--banner-line-height', `calc(50vh - ${total / 2}rem)`));
 }
+const backToTop = document.querySelector('#back-to-top');
+const progressCircle = document.querySelector<SVGCircleElement>('#progressCircle');
+const updateProgress = () => {
+  const distance = document.documentElement.scrollHeight - innerHeight;
+  const progress = distance > 0 ? Math.min(1, scrollY / distance) : 0;
+  backToTop?.classList.toggle('show', scrollY > 100);
+  if (progressCircle) {
+    const circumference = 2 * Math.PI * 48;
+    progressCircle.style.strokeDasharray = String(circumference);
+    progressCircle.style.strokeDashoffset = String(circumference * (1 - progress));
+  }
+};
+window.addEventListener('scroll', updateProgress, { passive: true });
+updateProgress();

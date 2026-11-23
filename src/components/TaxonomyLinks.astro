@@ -1,0 +1,12 @@
+---
+import Icon from './Icon.astro';
+import { taxonomyUrl } from '../lib/content';
+import { theme } from '../lib/config.mjs';
+interface Props { kind: 'tags' | 'categories'; names: string[]; }
+const { kind, names } = Astro.props;
+---
+{kind === 'categories' && names.length > 0 && <span class="post-meta-item-icon" style="margin-right:3px"><Icon name="ri:folder-line" /></span>}
+{names.map((name) => <a class={kind === 'tags' ? 'tag-item' : 'category-item'} href={taxonomyUrl(kind, name)} style={`--text-color:${theme[kind]?.[name] || 'var(--hty-text-color)'}`}>
+  {kind === 'tags' && <span class="post-meta-item-icon"><Icon name={theme.icons.tag} /></span>}
+  <span class={kind === 'tags' ? 'tag-name' : undefined}>{name}</span>
+</a>)}

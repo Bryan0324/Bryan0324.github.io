@@ -2,10 +2,20 @@
 import type { Entry } from '../lib/content';
 import { formatDate } from '../lib/content';
 import { theme } from '../lib/config.mjs';
-interface Props { entry: Entry; }
+import Icon from './Icon.astro';
+import TaxonomyLinks from './TaxonomyLinks.astro';
+interface Props { entry: Entry; detailed?: boolean; }
 const { data } = Astro.props.entry;
+const showUpdated = data.updated && data.date && formatDate(data.updated) !== formatDate(data.date);
 ---
 <div class="post-meta">
-  {data.date && theme.post_meta.created_at && <span>發表於 <time datetime={formatDate(data.date)}>{formatDate(data.date)}</time></span>}
-  {data.updated && theme.post_meta.updated_at && <span> · 更新於 <time datetime={formatDate(data.updated)}>{formatDate(data.updated)}</time></span>}
+  <div class="post-time">
+    {data.date && theme.post_meta.created_at && <><span class="post-meta-item-icon"><Icon name="ri:calendar-line" /></span>{' '}{theme.post_meta.item_text && '發表於 '}<time title={`建立時間：${formatDate(data.date)}`} datetime={formatDate(data.date)}>{formatDate(data.date)}</time></>}
+    {showUpdated && theme.post_meta.updated_at && <><span class="post-meta-divider">-</span><span class="post-meta-item-icon"><Icon name="ri:calendar-2-line" /></span>{' '}{theme.post_meta.item_text && '更新於 '}<time title={`修改時間：${formatDate(data.updated!)}`} datetime={formatDate(data.updated!)}>{formatDate(data.updated!)}</time></>}
+  </div>
+  {Astro.props.detailed && <div class="post-classify">
+    {theme.post_meta.categories && <span class="post-category"><TaxonomyLinks kind="categories" names={data.categories} /></span>}
+    {theme.post_meta.categories && data.categories.length > 0 && theme.post_meta.tags && data.tags.length > 0 && <span class="post-meta-divider">-</span>}
+    {theme.post_meta.tags && <span class="post-tag"><TaxonomyLinks kind="tags" names={data.tags} /></span>}
+  </div>}
 </div>

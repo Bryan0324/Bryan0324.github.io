@@ -5,6 +5,7 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import yun from './integrations/yun.mjs';
 import remarkHexo from './integrations/remark-hexo.mjs';
+import rehypeYunCode from './integrations/rehype-yun-code.mjs';
 import { site } from './src/lib/config.mjs';
 
 export default defineConfig({
@@ -14,7 +15,7 @@ export default defineConfig({
   integrations: [yun(), mdx(), react()],
   markdown: {
     remarkPlugins: [remarkMath, remarkHexo],
-    rehypePlugins: [rehypeKatex],
-    shikiConfig: { themes: { light: 'github-light', dark: 'github-dark' }, wrap: true },
+    rehypePlugins: [rehypeKatex, rehypeYunCode],
+    syntaxHighlight: 'prism',
   },
 });

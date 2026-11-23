@@ -1,0 +1,18 @@
+---
+import { taxonomyUrl, type Post } from '../lib/content';
+import { theme } from '../lib/config.mjs';
+interface Props { groups: [string, Post[]][]; amount?: number; }
+const groups = [...Astro.props.groups].sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0).slice(0, Astro.props.amount || 200);
+const counts = [...new Set(groups.map(([, posts]) => posts.length))].sort((a, b) => a - b);
+const rgb = (hex: string) => {
+  const value = hex.replace('#', '');
+  return (value.length === 3 ? [...value].map((c) => c + c).join('') : value).match(/.{2}/g)!.map((c) => parseInt(c, 16));
+};
+const start = rgb(theme.colors.tag_start_color || '#999999');
+const end = rgb(theme.colors.tag_end_color || theme.colors.primary);
+---
+<div class="tag-cloud"><div class="tag-cloud-tags">{groups.map(([name, posts]) => {
+  const weight = counts.length > 1 ? counts.indexOf(posts.length) / (counts.length - 1) : 0;
+  const color = start.map((value, i) => Math.round(value + (end[i] - value) * weight)).join(',');
+  return <><a href={taxonomyUrl('tags', name)} style={`font-size:${12 + 18 * weight}px;color:rgb(${color})`}>{name}</a>{' '}</>;
+})}</div></div>

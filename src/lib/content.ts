@@ -62,12 +62,12 @@ export async function routes() {
     }
   };
   paginate('', undefined, [...visible].sort((a, b) => Number(b.data.sticky || b.data.top || 0) - Number(a.data.sticky || a.data.top || 0)), true);
-  paginate('archives', '文章歸檔', visible);
+  paginate('archives', '歸檔', visible);
   const periods = new Set(visible.flatMap((post) => {
     const date = formatDate(post.data.date!);
     return [date.slice(0, 4), date.slice(0, 7).replace('-', '/')];
   }));
-  for (const period of periods) paginate(`archives/${period}`, `文章歸檔 · ${period}`, visible.filter((post) => formatDate(post.data.date!).replaceAll('-', '/').startsWith(period)));
+  for (const period of periods) paginate(`archives/${period}`, `歸檔 · ${period}`, visible.filter((post) => formatDate(post.data.date!).replaceAll('-', '/').startsWith(period)));
   for (const kind of ['tags', 'categories'] as const) {
     const groups = taxonomy(visible, kind);
     add(kind, { kind: 'taxonomy', title: kind === 'tags' ? '標籤' : '分類', taxonomy: kind, groups });

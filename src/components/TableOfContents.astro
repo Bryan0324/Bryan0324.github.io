@@ -1,0 +1,10 @@
+---
+import type { TocItem } from '../lib/headings';
+import { theme } from '../lib/config.mjs';
+interface Props { items: TocItem[]; child?: boolean; }
+const { items, child = false } = Astro.props;
+---
+<ol class={child ? 'toc-child' : 'toc'}>{items.map((item) => <li class={`toc-item toc-level-${item.depth}`}>
+  <a class="toc-link" href={`#${item.slug}`}>{theme.toc.list_number && <span class="toc-number">{item.number} </span>}<span class="toc-text">{item.text}</span></a>
+  {item.children.length > 0 && <Astro.self items={item.children} child />}
+</li>)}</ol>

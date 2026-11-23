@@ -6,7 +6,10 @@ import PostCard from '../components/PostCard.astro';
 import PostMeta from '../components/PostMeta.astro';
 import Pagination from '../components/Pagination.astro';
 import Comments from '../components/Comments.astro';
-import { routes, postUrl, taxonomyUrl, type Route } from '../lib/content';
+import Icon from '../components/Icon.astro';
+import PostTimeline from '../components/PostTimeline.astro';
+import TagCloud from '../components/TagCloud.astro';
+import { routes, postUrl, taxonomyUrl, visiblePosts, type Route } from '../lib/content';
 import { site, theme } from '../lib/config.mjs';
 
 export const getStaticPaths = routes;
@@ -18,41 +21,46 @@ const Content = rendered?.Content;
 const title = entry?.data.title || ('title' in route ? route.title : undefined);
 const home = route.kind === 'list' && route.home;
 const isPost = entry?.collection === 'posts';
+const listKind = route.kind === 'list' ? route.base.startsWith('archives') ? 'archive' : route.base.startsWith('tags') ? 'tag' : 'category' : undefined;
+const archiveCount = listKind === 'archive' ? (await visiblePosts()).length : 0;
 ---
 <Base title={title} description={entry?.data.description} home={home} headings={entry?.data.toc !== false && (isPost || entry?.data.toc) ? rendered?.headings : []}>
   {route.kind === 'list' && <>
     {home && route.page === 1 && theme.banner.enable && <Banner />}
-    {title && <header class="page-header"><h1>{title}</h1></header>}
-    <section id="recent-posts" class="flex flex-col">
+    {home ? <section id="recent-posts" class="flex flex-col">
       {!route.posts.length && <p class="empty-state">還沒有文章，喵～</p>}
       {route.posts.map((post) => <PostCard post={post} />)}
-    </section>
+    </section> : <section id={listKind} class="hty-card">
+      <header class="post-header"><h1 class="post-title"><Icon name={listKind === 'archive' ? 'ri:archive-line' : listKind === 'tag' ? theme.icons.tag : theme.icons.category} />{title}</h1></header>
+      {listKind === 'archive' && <div class="page-subtitle">共計 {archiveCount} 篇日誌</div>}
+      <PostTimeline posts={route.posts} />
+      {route.page === route.total && <h5 class="last-word text-center">{theme.archive.last_word}</h5>}
+    </section>}
     <Pagination page={route.page} total={route.total} base={route.base} />
-    {!home && <p class="empty-state">{theme.archive.last_word}</p>}
   </>}
   {route.kind === 'taxonomy' && <section id="page" class="hty-card">
-    <header class="page-header"><h1>{route.title}</h1></header>
-    <div class="taxonomy-cloud">{route.groups.map(([name, posts]) => <a href={taxonomyUrl(route.taxonomy, name)}>{name} <small>({posts.length})</small></a>)}</div>
+    <header class="post-header"><h1 class="post-title"><Icon name={route.taxonomy === 'tags' ? theme.icons.tag : theme.icons.category} />{route.title}</h1></header>
+    <div class="page-subtitle">共計 {route.groups.length} 個{route.title}</div>
+    {route.taxonomy === 'tags' ? <TagCloud groups={route.groups} /> : <div class="category-lists"><ul class="category-list">{route.groups.map(([name, posts]) => <li class="category-list-item"><a class="category-list-link" href={taxonomyUrl('categories', name)}>{name}</a><span class="category-list-count">{posts.length}</span></li>)}</ul></div>}
   </section>}
   {entry && Content && <div id={isPost ? 'post' : 'page'}>
     <article class="hty-card post-block">
-      <header class="post-header"><h1 class="post-title">{entry.data.title}</h1><PostMeta entry={entry} /></header>
+      <header class="post-header"><h1 class="post-title">{entry.data.title}</h1>{!entry.data.links && <PostMeta entry={entry} detailed={isPost} />}</header>
       {entry.data.url && <p class="text-center"><a class="hty-button" href={entry.data.url} target="_blank" rel="noopener noreferrer">前往連結 ↗</a></p>}
-      {entry.data.links && <div class="friend-grid">{entry.data.links.map((friend) => <a class="friend-card" href={friend.url} target="_blank" rel="noopener noreferrer">
-        <img src={friend.avatar || theme.anonymous_image} alt={friend.name || friend.blog} width="72" height="72" loading="lazy" />
-        <div><strong>{friend.blog || friend.name}</strong><p>{friend.desc}</p></div>
-      </a>)}</div>}
+      {entry.data.links && <div id="links"><ul class="link-items">{entry.data.links.map((friend) => <li class="link-item" style={`--primary-color:${friend.color || theme.colors.primary}`}><a class="link-url" href={friend.url} title={friend.name || friend.blog} target="_blank" rel="friend noopener noreferrer">
+        <div class="link-left"><img class="link-avatar" src={friend.avatar || theme.anonymous_image} alt={friend.name || friend.blog} loading="lazy" /></div>
+        <div class="link-info"><div class="link-blog">{friend.blog || friend.name}</div><div class="link-desc">{friend.desc}</div></div>
+      </a></li>)}</ul></div>}
       <section class="post-body"><div class="post-content markdown-body"><Content /></div></section>
-      {isPost && <div class="post-taxonomies">{entry.data.categories.map((name) => <a href={taxonomyUrl('categories', name)}>▱ {name}</a>)}{entry.data.tags.map((name) => <a href={taxonomyUrl('tags', name)}># {name}</a>)}</div>}
       {isPost && theme.creative_commons.post && <ul class="post-copyright">
-        <li>本文作者：{site.author}</li>
-        <li>本文連結：<a href={new URL(Astro.url.pathname, site.url)}>{new URL(Astro.url.pathname, site.url).href}</a></li>
-        <li>授權條款：<a href={`https://creativecommons.org/licenses/${theme.creative_commons.license}/4.0/${theme.creative_commons.language}`}>CC {theme.creative_commons.license.toUpperCase()} 4.0</a></li>
+        <li><strong>本文作者：</strong>{site.author}</li>
+        <li><strong>本文連結：</strong><a href={new URL(Astro.url.pathname, site.url)}>{new URL(Astro.url.pathname, site.url).href}</a></li>
+        <li><strong>版權聲明：</strong>本部落格所有文章除特別聲明外，均預設採用 <a href={`https://creativecommons.org/licenses/${theme.creative_commons.license}/4.0/${theme.creative_commons.language}`} title={`CC ${theme.creative_commons.license.toUpperCase()} 4.0`} aria-label={`CC ${theme.creative_commons.license.toUpperCase()} 4.0`}><Icon name="ri:creative-commons-line" />{theme.creative_commons.license.split('-').map((part: string) => <Icon name={`ri:creative-commons-${part}-line`} />)}</a> 許可協議。</li>
       </ul>}
     </article>
-    {route.kind === 'entry' && isPost && <nav class="article-navigation" aria-label="相鄰文章">
-      <div>{route.prev && <a href={postUrl(route.prev)}>← {route.prev.data.title}</a>}</div>
-      <div>{route.next && <a href={postUrl(route.next)}>{route.next.data.title} →</a>}</div>
+    {route.kind === 'entry' && isPost && <nav class="post-nav" aria-label="相鄰文章">
+      <div class="post-nav-item">{route.prev && <a class="post-nav-prev" href={postUrl(route.prev)}><Icon name="ri:arrow-left-s-line" /><span class="post-nav-text">{route.prev.data.title}</span></a>}</div>
+      <div class="post-nav-item">{route.next && <a class="post-nav-next" href={postUrl(route.next)}><span class="post-nav-text">{route.next.data.title}</span><Icon name="ri:arrow-right-s-line" /></a>}</div>
     </nav>}
     {entry.data.comments && <Comments />}
   </div>}

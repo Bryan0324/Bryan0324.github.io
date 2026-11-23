@@ -43,23 +43,26 @@ const canonical = new URL(Astro.url.pathname.replace(/\.html\/$/, '.html'), site
   </head>
   <body class:list={{ 'is-home': home }} data-fireworks={theme.fireworks.enable ? JSON.stringify(theme.fireworks.colors) : undefined} data-mermaid={String(theme.mermaid.enable)} data-reveal={String(theme.scrollreveal.enable)}>
     <a class="skip-link" href="#content">跳至主要內容</a>
+    {theme.fireworks.enable && <canvas class="fireworks" aria-hidden="true"></canvas>}
     <div class="container">
       <Sidebar headings={headings} />
       <main id="content" class="sidebar-translate"><slot /></main>
-      <footer class="footer sidebar-translate">
-        <div>© {theme.footer.since}–{new Date().getFullYear()} ☁ {site.author}</div>
-        <div>由 <a href="https://astro.build/">Astro</a> 驅動 · 主題 <a href="https://github.com/YunYouJun/hexo-theme-yun">Yun</a>（Astro 移植）</div>
-        {theme.footer.live_time.enable && <div>{theme.footer.live_time.prefix} <span id="live-time" data-start={theme.footer.live_time.start_time}></span> {theme.footer.live_time.suffix}</div>}
+      <footer id="footer" class="sidebar-translate">
+        <div class="copyright"><span>© {theme.footer.since} – {new Date().getFullYear()}</span><span id="animate" class="with-love"><Icon name={theme.footer.icon.name} /></span><span class="author">{site.author}</span></div>
+        {theme.footer.powered.enable && <div class="powered">由 <a href="https://astro.build/">Astro</a> 驅動<span class="footer-separator">|</span>主題 - <a href="https://github.com/YunYouJun/hexo-theme-yun">Yun</a>（Astro 移植）</div>}
+        {theme.footer.live_time.enable && <div class="live-time">{theme.footer.live_time.prefix} <span id="live-time" data-start={theme.footer.live_time.start_time}></span><span class="moe-text">{theme.footer.live_time.suffix}</span></div>}
       </footer>
     </div>
-    <a class="back-to-top hty-icon-button" href="#content" aria-label="回到頂部"><Icon name="ri:arrow-up-s-line" /></a>
-    {theme.local_search.enable && <dialog id="search-dialog" aria-labelledby="search-title">
-      <div class="search-heading"><h2 id="search-title">搜尋文章</h2><button data-search-close aria-label="關閉搜尋">✕</button></div>
+    <a id="back-to-top" class="hty-icon-button" href="#content" aria-label="回到頂部"><Icon name="ri:arrow-up-s-line" /><svg class="progress-circle-container" viewBox="0 0 100 100" aria-hidden="true"><circle id="progressCircle" class="progress-circle" cx="50" cy="50" r="48" fill="none" stroke={theme.colors.primary} stroke-width="2" stroke-linecap="round" /></svg></a>
+    {theme.local_search.enable && <>
+    <button id="search" class="hty-icon-button icon-search" data-search-open aria-label="搜尋文章"><span class="site-state-item-icon"><Icon name="ri:search-line" /></span></button>
+    <dialog id="search-dialog" class="popup search-popup" aria-labelledby="search-title">
+      <h2 id="search-title" class="sr-only">搜尋文章</h2>
+      <div class="search-header"><button class="popup-btn-close close-icon hty-icon-button" data-search-close aria-label="關閉搜尋"><Icon name="ri:close-line" /></button></div>
       <label class="sr-only" for="search-input">搜尋關鍵字</label>
-      <input id="search-input" type="search" placeholder={theme.search.placeholder} autocomplete="off" />
-      <p id="search-status" role="status">輸入關鍵字搜尋標題與內文</p>
-      <ul id="search-results"></ul>
-    </dialog>}
+      <div class="search-input-container"><input id="search-input" class="search-input" type="search" placeholder={theme.search.placeholder} autocomplete="off" /></div>
+      <div class="search-result-container"><p id="search-status" role="status"></p><ul id="search-results" class="search-result-list"></ul></div>
+    </dialog></>}
     <script src="../scripts/client.ts"></script>
   </body>
 </html>

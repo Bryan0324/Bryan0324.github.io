@@ -1,8 +1,11 @@
 ---
 import type { MarkdownHeading } from 'astro';
 import { site, theme } from '../lib/config.mjs';
-import { visiblePosts, taxonomy, taxonomyUrl } from '../lib/content';
+import { visiblePosts, taxonomy } from '../lib/content';
 import Icon from './Icon.astro';
+import TagCloud from './TagCloud.astro';
+import TableOfContents from './TableOfContents.astro';
+import { headingTree } from '../lib/headings';
 interface Props { headings?: MarkdownHeading[]; }
 const { headings = [] } = Astro.props;
 const posts = await visiblePosts();
@@ -18,40 +21,39 @@ const menus: { path: string; title: string; icon: string; count?: number }[] = [
   ...theme.menu.list.map((item: { type: string; path: string; title?: string; icon: string }) => ({ ...defaults[item.type], ...item, title: item.title || defaults[item.type]?.title || item.type })),
 ];
 ---
-<button id="menu-btn" class="hty-icon-button" aria-label="開啟選單" aria-controls="site-sidebar" aria-expanded="false"><Icon name="ri:menu-line" /></button>
+<button id="menu-btn" class="hty-icon-button" aria-label="開啟選單" aria-controls="site-sidebar" aria-expanded="false"><span class="hamburger hamburger--spin"><span class="hamburger-box"><span class="hamburger-inner"></span></span></span></button>
 <button class="sidebar-overlay" aria-label="關閉選單" tabindex="-1"></button>
 <aside id="site-sidebar" class="sidebar" aria-label="網站導覽">
   {headings.length > 0 && <div class="sidebar-nav">
-    <button class="sidebar-nav-item sidebar-nav-active" data-panel="post-toc-wrap" aria-pressed="true">文章目錄</button>
-    <button class="sidebar-nav-item" data-panel="site-overview-wrap" aria-pressed="false">網站資訊</button>
+    <button class="sidebar-nav-item hty-icon-button sidebar-nav-active" data-panel="post-toc-wrap" aria-label="文章目錄" title="文章目錄" aria-pressed="true"><Icon name="ri:list-ordered" /></button>
+    <button class="sidebar-nav-item hty-icon-button" data-panel="site-overview-wrap" aria-label="網站資訊" title="網站資訊" aria-pressed="false"><Icon name="ri:passport-line" /></button>
   </div>}
   <div id="site-overview-wrap" class:list={['sidebar-panel', { 'sidebar-panel-active': !headings.length }]}>
-    <div class="site-info">
+    <div class:list={['site-info', { 'fix-top': headings.length > 0 }]}>
       {theme.avatar?.enable && <a class="site-author-avatar" href="/about/" title="關於我"><img src={theme.avatar.url} width="96" height="96" alt={site.author} /></a>}
       <div class="site-author-name"><a href="/about/">{site.author}</a></div>
       <a class="site-name" href="/about/site.html">{site.title}</a>
-      <div class="site-subtitle">{site.subtitle}</div>
-      <p class="site-description">{site.description}</p>
+      <sub class="site-subtitle">{site.subtitle}</sub>
+      <div class="site-description">{site.description}</div>
     </div>
     <nav class="site-state" aria-label="主要選單">
-      {menus.map((item) => <a class="site-state-item hty-icon-button" href={item.path} title={item.title} aria-label={`${item.title}${item.count === undefined ? '' : ` ${item.count}`}`}><Icon name={item.icon} /><span class="site-state-item-count">{item.count}</span></a>)}
-      {theme.menu.custom && <a class="site-state-item hty-icon-button" href={theme.menu.custom.path} title={theme.menu.custom.title} aria-label={theme.menu.custom.title}><Icon name={theme.menu.custom.icon} /></a>}
+      {menus.map((item) => item.count === undefined
+        ? <a class="site-state-item hty-icon-button icon-home" href={item.path} title={item.title} aria-label={item.title}><span class="site-state-item-icon"><Icon name={item.icon} /></span></a>
+        : <div class="site-state-item"><a href={item.path} title={item.title} aria-label={`${item.title} ${item.count}`}><span class="site-state-item-icon"><Icon name={item.icon} /></span><span class="site-state-item-count">{item.count}</span></a></div>)}
+      {theme.menu.custom && <a class="site-state-item hty-icon-button" href={theme.menu.custom.path} title={theme.menu.custom.title} aria-label={theme.menu.custom.title}><span class="site-state-item-icon"><Icon name={theme.menu.custom.icon} /></span></a>}
     </nav>
-    <hr />
+    <hr style="margin-bottom:0.5rem" />
     <div class="links-of-author">
       {theme.social?.map((item: { link: string; name: string; icon: string; color: string }) => <a class="links-of-author-item hty-icon-button" href={item.link} title={item.name} aria-label={item.name} target="_blank" rel="noopener noreferrer" style={`color:${item.color}`}><Icon name={item.icon} /></a>)}
     </div>
+    <hr style="margin:0.5rem 1rem" />
     <div class="links">
-      {theme.pages?.map((item: { url: string; name: string; icon: string }) => <a class="links-item hty-icon-button" href={item.url} title={item.name} aria-label={item.name}><Icon name={item.icon} /></a>)}
-      <a class="links-item hty-icon-button" href="/about/" title="關於我" aria-label="關於我"><Icon name="ri:user-line" /></a>
+      {theme.pages?.map((item: { url: string; name: string; icon: string; color: string }) => <a class="links-item hty-icon-button" href={item.url} title={item.name} aria-label={item.name} style={`color:${item.color}`}><Icon name={item.icon} /></a>)}
     </div>
+    {theme.mode_toggle?.enable !== false && <><br /><button id="toggle-mode-btn" class="links-item hty-icon-button" aria-label="切換色彩模式" title="切換色彩模式" style="color:#f1cb64"><Icon name="ri:contrast-2-line" /></button></>}
   </div>
   {headings.length > 0 && <nav id="post-toc-wrap" class="sidebar-panel sidebar-panel-active" aria-label="文章目錄">
-    <ol class="astro-toc">{headings.filter((heading) => heading.depth >= (theme.toc.min_depth || 1) && heading.depth <= (theme.toc.max_depth || 6)).map((heading) => <li style={`padding-left:${(heading.depth - 1) * 0.7}rem`}><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol>
+    <div class="post-toc"><div class="post-toc-content"><TableOfContents items={headingTree(headings.filter((heading) => heading.depth >= (theme.toc.min_depth || 1) && heading.depth <= (theme.toc.max_depth || 6)))} /></div></div>
   </nav>}
-  <div class="sidebar-tools">
-    {theme.local_search.enable && <button class="hty-icon-button" data-search-open aria-label="搜尋文章"><Icon name="ri:search-line" /></button>}
-    {theme.mode_toggle?.enable !== false && <button id="toggle-mode-btn" class="hty-icon-button" aria-label="切換色彩模式" title="切換色彩模式"><Icon name="ri:contrast-2-line" /></button>}
-  </div>
-  {theme.sidebar.tagcloud.enable && <div class="tag-cloud">{tags.slice(0, theme.sidebar.tagcloud.amount || 20).map(([name, items]) => <a href={taxonomyUrl('tags', name)} style={`font-size:${Math.min(24, 12 + items.length * 2)}px`}>{name}</a>)}</div>}
+  {theme.sidebar.tagcloud.enable && <TagCloud groups={tags} amount={theme.sidebar.tagcloud.amount || 20} />}
 </aside>

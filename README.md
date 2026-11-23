@@ -40,12 +40,16 @@ src/components/             側欄、橫幅、文章卡片、留言與分頁
 src/pages/[...path].astro    文章、頁面、歸檔、分類與標籤路由
 src/pages/search.json.ts     靜態全文搜尋索引
 src/scripts/client.ts       模式切換、搜尋、目錄、複製與煙火
+src/scripts/fireworks.ts    原版 Canvas 圓形粒子與擴散圓環
 src/styles/astro.css         Astro 適配樣式
 integrations/yun.mjs         原始 Stylus 編譯與靜態資源收集
 integrations/remark-hexo.mjs Hexo Markdown 相容層
+integrations/rehype-yun-code.mjs Prism 程式碼行號
 ```
 
 已移植：Yun 直排首頁與雲浪、響應式側欄、文章／分頁／歸檔／分類／標籤、目錄、友鏈、全文搜尋、日／夕陽／夜間與 auto/time 模式、Giscus 主題同步、程式碼高亮與複製、數學公式、Mermaid、React 互動圖表、點擊煙火、運行時間與 404。
+
+外觀沿用原主題的卡片間距、側欄、圖示、標籤雲、歸檔時間軸、友鏈卡片與全螢幕搜尋。首頁僅在文章有 `<!-- more -->` 時顯示摘要與閱讀更多，`description` 顯示於標題下方。點擊特效採用原版的 20 顆圓形粒子、擴散圓環、尺寸與緩動時間；程式碼使用 Prism 配色及行號。
 
 原主題樣式直接由 `themes/yun/source/css/` 編譯，不需要 Hexo 執行環境。原始 Pug 與 Hexo scripts 留作移植參考；未啟用的 Hexo 外掛（例如 Algolia、相簿、播放器、其他留言服務）尚未移植，不能直接靠舊設定啟用。這是本站的 Astro starter，尚非發佈至 npm 的主題套件。複用時一併保留 `src/`、`integrations/`、設定檔與 `themes/yun/` 的樣式、預設設定及授權檔。
 
