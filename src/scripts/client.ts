@@ -1,4 +1,5 @@
 import { initFireworks } from './fireworks';
+import { initGiscus } from './giscus';
 
 const root = document.documentElement;
 const container = document.querySelector('.container')!;
@@ -33,9 +34,7 @@ document.querySelectorAll<HTMLButtonElement>('[data-panel]').forEach((button) =>
 
 const modes = ['light', 'sunset', 'dark'];
 const currentMode = () => root.classList.contains('dark') ? 'dark' : root.classList.contains('sunset') ? 'sunset' : 'light';
-function syncComments() {
-  document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')?.contentWindow?.postMessage({ giscus: { setConfig: { theme: currentMode() === 'dark' ? 'transparent_dark' : 'light' } } }, 'https://giscus.app');
-}
+let syncComments = () => {};
 function applyMode(mode: string) {
   root.classList.remove('dark', 'sunset');
   if (mode !== 'light') root.classList.add(mode);
@@ -59,21 +58,7 @@ if (root.dataset.mode === 'time') setInterval(automaticMode, 60_000);
 
 const comments = document.querySelector<HTMLElement>('#giscus');
 if (comments) {
-  const observer = new IntersectionObserver((entries) => {
-    if (!entries.some((entry) => entry.isIntersecting)) return;
-    observer.disconnect();
-    const config = JSON.parse(comments.dataset.config!);
-    const script = document.createElement('script');
-    script.src = 'https://giscus.app/client.js';
-    script.async = true;
-    script.crossOrigin = 'anonymous';
-    for (const key of ['repo', 'repo-id', 'category', 'category-id', 'mapping', 'reactions-enabled', 'emit-metadata', 'lang', 'input-position', 'strict']) {
-      if (config[key] !== undefined) script.setAttribute(`data-${key}`, String(config[key]));
-    }
-    script.setAttribute('data-theme', currentMode() === 'dark' ? 'transparent_dark' : 'light');
-    comments.append(script);
-  }, { rootMargin: '200px' });
-  observer.observe(comments);
+  syncComments = initGiscus(comments, currentMode);
 }
 
 interface SearchEntry { title: string; url: string; content: string; tags: string[]; }
@@ -166,7 +151,7 @@ if (headings.length) {
 
 const uptime = document.querySelector<HTMLElement>('#live-time');
 if (uptime) {
-  const start = new Date(uptime.dataset.start! + (/(?:Z|[+-]\d\d:\d\d)$/.test(uptime.dataset.start!) ? '' : '+08:00')).valueOf();
+  const start = new Date(uptime.dataset.start!).valueOf();
   const update = () => {
     const elapsed = Math.max(0, Math.floor((Date.now() - start) / 1000));
     uptime.textContent = `${Math.floor(elapsed / 86400)} 天 ${Math.floor(elapsed / 3600) % 24} 時 ${Math.floor(elapsed / 60) % 60} 分 ${elapsed % 60} 秒`;

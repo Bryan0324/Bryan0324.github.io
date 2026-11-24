@@ -22,7 +22,7 @@ const hasExcerpt = excerpt && excerpt.length > 1;
     {hasExcerpt && <a class="hty-button hty-button--raised" style={`margin:1rem;background-color:${theme.colors.primary}`} href={postUrl(post)}>閱讀更多</a>}
   </div>
   <div class="hty-card__actions post-card__actions">
-    <div class="post-card-category">{theme.post_meta.categories && post.data.categories.length ? <TaxonomyLinks kind="categories" names={post.data.categories} /> : <Icon name="ri:folder-line" />}</div>
-    <div class="post-card-tag">{theme.post_meta.tags && post.data.tags.length ? <TaxonomyLinks kind="tags" names={post.data.tags} /> : <Icon name={theme.icons.tag} />}</div>
+    {theme.post_meta.categories && <div class="post-card-category">{post.data.categories.length ? <TaxonomyLinks kind="categories" names={post.data.categories} /> : <Icon name={theme.icons.category} />}</div>}
+    {theme.post_meta.tags && <div class="post-card-tag">{post.data.tags.length ? <TaxonomyLinks kind="tags" names={post.data.tags} /> : <Icon name={theme.icons.tag} />}</div>}
   </div>
 </article>

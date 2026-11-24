@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { parse } from 'yaml';
+import themeDefaults from './theme-defaults.mjs';
 
 const readYaml = (path) => parse(readFileSync(new URL(path, import.meta.url), 'utf8'));
 function merge(base, override) {
@@ -11,9 +12,10 @@ function merge(base, override) {
   return result;
 }
 
-// Keep the existing, documented configuration as the theme's public interface.
-export const site = readYaml('../../_config.yml');
+// Site settings and theme overrides share one user-facing configuration file.
+const { theme: themeOverrides = {}, ...siteConfig } = readYaml('../../_config.yml');
+export const site = siteConfig;
 export const theme = merge(
-  readYaml('../../themes/yun/_config.yml'),
-  readYaml('../../_config.yun.yml'),
+  themeDefaults,
+  themeOverrides,
 );

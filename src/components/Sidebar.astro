@@ -7,7 +7,7 @@ import TagCloud from './TagCloud.astro';
 import TableOfContents from './TableOfContents.astro';
 import { headingTree } from '../lib/headings';
 interface Props { headings?: MarkdownHeading[]; }
-const { headings = [] } = Astro.props;
+const headings = (Astro.props.headings || []).filter((heading) => heading.depth >= theme.toc.min_depth && heading.depth <= theme.toc.max_depth);
 const posts = await visiblePosts();
 const tags = taxonomy(posts, 'tags');
 const categories = taxonomy(posts, 'categories');
@@ -53,7 +53,7 @@ const menus: { path: string; title: string; icon: string; count?: number }[] = [
     {theme.mode_toggle?.enable !== false && <><br /><button id="toggle-mode-btn" class="links-item hty-icon-button" aria-label="切換色彩模式" title="切換色彩模式" style="color:#f1cb64"><Icon name="ri:contrast-2-line" /></button></>}
   </div>
   {headings.length > 0 && <nav id="post-toc-wrap" class="sidebar-panel sidebar-panel-active" aria-label="文章目錄">
-    <div class="post-toc"><div class="post-toc-content"><TableOfContents items={headingTree(headings.filter((heading) => heading.depth >= (theme.toc.min_depth || 1) && heading.depth <= (theme.toc.max_depth || 6)))} /></div></div>
+    <div class="post-toc"><div class="post-toc-content"><TableOfContents items={headingTree(headings)} /></div></div>
   </nav>}
-  {theme.sidebar.tagcloud.enable && <TagCloud groups={tags} amount={theme.sidebar.tagcloud.amount || 20} />}
+  {theme.sidebar.tagcloud.enable && <TagCloud groups={tags} amount={theme.sidebar.tagcloud.amount ?? 20} />}
 </aside>

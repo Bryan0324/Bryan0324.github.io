@@ -2,7 +2,7 @@
 import { taxonomyUrl, type Post } from '../lib/content';
 import { site, theme } from '../lib/config.mjs';
 interface Props { groups: [string, Post[]][]; amount?: number; }
-const limit = Astro.props.amount || 200;
+const limit = Astro.props.amount ?? Infinity;
 // Select by frequency before sorting labels, so the limit does not exclude CJK tags.
 const groups = [...Astro.props.groups]
   .sort(([a, aPosts], [b, bPosts]) => bPosts.length - aPosts.length || a.localeCompare(b, site.language))

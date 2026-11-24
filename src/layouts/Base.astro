@@ -1,6 +1,8 @@
 ---
 import type { MarkdownHeading } from 'astro';
 import { site, theme } from '../lib/config.mjs';
+import { themeStyle } from '../lib/theme-style.mjs';
+import { localDate } from '../lib/urls.mjs';
 import Sidebar from '../components/Sidebar.astro';
 import Icon from '../components/Icon.astro';
 import 'star-markdown-css/dist/yun/yun-markdown.min.css';
@@ -13,7 +15,7 @@ const pageTitle = title ? `${title} | ${site.title}` : site.title;
 const canonical = new URL(Astro.url.pathname.replace(/\.html\/$/, '.html'), site.url);
 ---
 <!doctype html>
-<html lang={site.language || 'zh-TW'} class={theme.mode === 'dark' ? 'dark' : theme.mode === 'sunset' ? 'sunset' : ''} data-mode={theme.mode}>
+<html lang={site.language || 'zh-TW'} class={theme.mode === 'dark' ? 'dark' : theme.mode === 'sunset' ? 'sunset' : ''} data-mode={theme.mode} style={themeStyle(theme)}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -50,7 +52,7 @@ const canonical = new URL(Astro.url.pathname.replace(/\.html\/$/, '.html'), site
       <footer id="footer" class="sidebar-translate">
         <div class="copyright"><span>© {theme.footer.since} – {new Date().getFullYear()}</span><span id="animate" class="with-love"><Icon name={theme.footer.icon.name} /></span><span class="author">{site.author}</span></div>
         {theme.footer.powered.enable && <div class="powered">由 <a href="https://astro.build/">Astro</a> 驅動<span class="footer-separator">|</span>主題 - <a href="https://github.com/YunYouJun/hexo-theme-yun">Yun</a>（Astro 移植）</div>}
-        {theme.footer.live_time.enable && <div class="live-time">{theme.footer.live_time.prefix} <span id="live-time" data-start={theme.footer.live_time.start_time}></span><span class="moe-text">{theme.footer.live_time.suffix}</span></div>}
+        {theme.footer.live_time.enable && <div class="live-time">{theme.footer.live_time.prefix} <span id="live-time" data-start={localDate(theme.footer.live_time.start_time, site.timezone).toISOString()}></span><span class="moe-text">{theme.footer.live_time.suffix}</span></div>}
       </footer>
     </div>
     <a id="back-to-top" class="hty-icon-button" href="#content" aria-label="回到頂部"><Icon name="ri:arrow-up-s-line" /><svg class="progress-circle-container" viewBox="0 0 100 100" aria-hidden="true"><circle id="progressCircle" class="progress-circle" cx="50" cy="50" r="48" fill="none" stroke={theme.colors.primary} stroke-width="2" stroke-linecap="round" /></svg></a>

@@ -1,4 +1,4 @@
-/* Astro additions to Yun's original MIT-licensed Stylus styles. */
+/* Astro components, accessibility, and Markdown enhancements to native Yun CSS. */
 :root { color-scheme: light; }
 html.dark { color-scheme: dark; }
 body { color: var(--hty-text-color); overflow-wrap: break-word; }

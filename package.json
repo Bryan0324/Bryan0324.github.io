@@ -10,11 +10,14 @@
     "test": "node --test tests/*.test.mjs",
     "verify": "node scripts/verify-build.mjs",
     "verify:dev": "node scripts/verify-dev.mjs",
+    "verify:config": "node scripts/verify-config.mjs",
     "server": "astro dev",
     "start": "astro dev"
   },
   "type": "module",
-  "engines": { "node": ">=22.12.0" },
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "dependencies": {
     "@astrojs/mdx": "^4.3.0",
     "@astrojs/react": "^4.4.0",
@@ -29,10 +32,9 @@
     "react-dom": "^18.3.1",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
-    "stylus": "^0.64.0",
+    "star-markdown-css": "^0.4.1",
     "unist-util-visit": "^5.0.0",
-    "yaml": "^2.8.0",
-    "star-markdown-css": "^0.4.1"
+    "yaml": "^2.8.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",

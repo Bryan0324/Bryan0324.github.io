@@ -1,4 +1,4 @@
-/** Canvas effect ported from themes/yun/source/js/ui/fireworks.js (MIT, YunYouJun). */
+/** Canvas effect adapted from hexo-theme-yun (MIT, YunYouJun; licenses/Yun-LICENSE). */
 export function initFireworks(canvas: HTMLCanvasElement, colors: string[]) {
   const context = canvas.getContext('2d');
   if (!context) return;

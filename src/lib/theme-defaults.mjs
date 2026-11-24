@@ -1,0 +1,38 @@
+// Defaults for features implemented by this Astro theme.
+export default {
+  mode: 'auto', mode_toggle: { enable: true }, favicon: null, '404': { message: null },
+  colors: {
+    primary: '#0078E7', bg: '#f5f5f5', selection_bg: '#8e71c1',
+    tag_start_color: '#999999', tag_end_color: '#0078E7', dark: { block: '#1b1f2e' },
+    sunset: { bg: '#FFF5E6', block: '#FFE8D6', text: '#8B4513', link: '#FF8E53', banner: '#FF6B35' },
+  },
+  sidebar: { bg_image: '', dark_bg_image: '', sunset_bg_image: '', bg_position: 'bottom 1rem center', tagcloud: { enable: true, amount: 20 } },
+  toc: { list_number: true, min_depth: 1, max_depth: 6, collapse: true },
+  avatar: { enable: true, url: '/grass_cat.png', rounded: true },
+  social: [], pages: [], anonymous_image: '/grass_cat.png',
+  menu: { home: { path: '/', icon: 'ri:home-4-line' }, list: [], custom: null },
+  archive: { last_word: '沒有更多文章了' }, tags: {}, categories: {},
+  post_card: { opacity: 0.9 },
+  post_meta: { item_text: false, created_at: true, updated_at: true, categories: true, tags: true },
+  codeblock: { prismjs: { line_number: true } },
+  creative_commons: { license: 'by-nc-sa', language: 'deed.zh', post: true },
+  icons: { category: 'ri:folder-2-line', tag: 'ri:price-tag-3-line' },
+  banner: { enable: true, title: 'Yun', border: true, cloud: { enable: true, color: 'white' }, go_down: { enable: true, icon: 'ri:arrow-down-s-line' } },
+  font: {
+    cdn: { enable: false, lib: [] },
+    serif: { family: "'Songti SC', 'Noto Serif SC', STZhongsong, STKaiti, KaiTi, Roboto, serif", weight: 900 },
+    sans_serif: { family: "'PingFang SC', 'Microsoft YaHei', Roboto, Arial, sans-serif", weight: 400 },
+    monospace: { family: "'Source Code Pro', Consolas, Monaco, SFMono-Regular, 'Ubuntu Mono', Menlo, monospace" },
+  },
+  fireworks: { enable: true, colors: ['102, 167, 221', '62, 131, 225', '33, 78, 194'] },
+  cursor: { enable: false, default: '', pointer: '', text: '' },
+  smoothScroll: true, scrollreveal: { enable: true },
+  bg_image: { enable: false, url: '', dark: '', sunset: '', opacity: 1, blur: '0px' },
+  footer: {
+    since: 2025, icon: { name: 'ri:cloud-line', animated: true, color: '#0078E7' },
+    powered: { enable: true }, live_time: { enable: false, prefix: '', suffix: '', start_time: '2025-12-25T00:00:00' },
+  },
+  search: { modal: true, bg_image: '', dark_bg_image: '', placeholder: '搜尋文章' },
+  local_search: { enable: true }, mermaid: { enable: true }, comment: { enable: true },
+  giscus: { enable: false },
+};
