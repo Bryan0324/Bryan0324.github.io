@@ -10,8 +10,7 @@ links:
     name: 草貓
     blog: 草貓本貓
     desc: 草貓不是貓草
-    color: '#0078e7' # 代表色
-    email: # 非必要
+    color: '#95ffd0'
   - url: https://qwo877.github.io/me/
     avatar: https://qwo877.github.io/me/images/頭像高清.png
     name: 匿名的貓貓
